@@ -1,7 +1,9 @@
 from random import randint
 N = randint(0, 100)
+contador = 1
 num = int(input("O sistema escolheu um número. Qual é? "))
 while num != N :
+    contador = contador + 1
     if num>N:
         num2 = int(input("O número escolhido pelo sistema é menor. Introduza novo número: "))
         num = num2
@@ -9,4 +11,4 @@ while num != N :
         num3 = int(input("O número escolhido pelo sistema é maior. Introduza novo número: "))
         num = num3
 
-print("Está correto! o número escolhido pelo sistema foi: ", N)
+print("Está correto! o número escolhido pelo sistema foi: ", N, ". Foram usadas " ,contador, "tentativas." )
