@@ -1,0 +1,30 @@
+num = randint(0,100)
+N = int(input("Introduza um número entre 0 e 100: O computador irá tentar adivinhar qual é. Quando estiver certo, pressione 1. Enquanto estiver errado pressione 0."))
+controlo = 0
+novonum = 100
+novonum2 = 0
+while controlo != 1:
+    if num > N:
+        novonum = randint(novonum2,num)
+        if novonum < N and novonum > novonum2:
+            novonum2 = novonum
+        if novonum <= num and novonum > N:
+            num = novonum
+            controlo = int(input(novonum))
+        else:
+            substituto = randint(novonum2,num)
+            novonum = substituto
+            controlo = int(input(novonum))
+    elif num < N:
+        novonum2 = randint(num,novonum)
+        if novonum2 > N and novonum2 < novonum:
+            novonum = novonum2
+        if novonum2 >= num and novonum2 < N: 
+            controlo = int(input(novonum2)) 
+            num = novonum2              
+        else:
+            substituto2 = randint(num,novonum)
+            novonum2 = substituto2
+            controlo = int(input(novonum2))   
+
+print("O computador acertou no seu número! Foi o: ",N)
