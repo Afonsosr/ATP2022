@@ -1,0 +1,137 @@
+from random import randint
+
+def somaLista(lista):
+            soma = 0
+            for n in lista:
+                soma = soma + n
+            return soma
+        
+def mediaLista(lista):
+            media = somaLista(lista)/len(lista)
+            return media
+        
+def maiorLista(lista):
+            res = lista[0]
+            for n in lista[1:]:
+                if n >= res:
+                    res = n
+            return res
+
+def menorLista(lista):
+            res = lista[0]
+            for n in lista[1:]:
+                if n<= res:
+                    res = n
+            return res
+                
+def estaCrescente(lista):
+            n = 0
+            elemMenor = lista[0]
+            while n < len(lista):
+                elem = lista[n]
+                n = n+1
+                if elem > elemMenor:
+                    mensagem = str("Sim.")
+                    elemMenor = elem
+                elif elem == elemMenor:
+                    mensagem = str("A lista possui todos os elementos iguais.")
+                    elemMenor = elem
+                else:
+                    mensagem = str("Não.")       
+            return mensagem
+
+def estaDecrescente(lista):
+            n = 0
+            elemMaior = lista[0]
+            while n < len(lista):
+                elem = lista[n]
+                n = n+1
+                if elem < elemMaior:
+                    mensagem = str("Sim.")
+                    elemMaior = elem
+                elif elem == elemMaior:
+                    mensagem = str("A lista possui todos os elementos iguais.")
+                    elemMaior = elem
+                else:
+                    mensagem = str("Não.")       
+            return mensagem
+        
+def unico(lista, elem):
+    n = 0
+    posicoes = []
+    if elem not in lista:
+            posicoes.append(-1)
+    while n < len(lista):
+        if elem == lista[n]:
+            posicoes.append(n+1)
+        n = n + 1
+    return posicoes
+
+
+menu = int(input("""Menu:
+    (1)Criar Lista 
+    (2) Ler Lista
+    (3) Soma
+    (4) Média
+    (5) Maior
+    (6) Menor
+    (7) estaOrdenada por ordem crescente
+    (8) estaOrdenada por ordem decrescente
+    (9) Procura um elemento
+    (0) Sair"""))
+
+while menu != 0:
+    if menu == 1:
+        N = int(input("Quantos elementos terá a sua lista?: "))
+        lista = []
+        num = 1
+        while num <=N:
+            lista.append(randint(0,100))
+            num = num + 1
+        print(lista)
+        
+    elif menu == 2:
+        N = int(input("Quantos elementos terá a sua lista?: "))
+        lista = []
+        num = 1
+        while num <=N :
+            n = int(input("Introduza o elemento " + str(num) + ": "))
+            lista.append(n)
+            num = num + 1
+        print(lista)
+
+    elif menu == 3:
+        print(" A soma dos elementos da lista é: ", somaLista(lista))  
+
+    elif menu == 4:
+        print(" A média dos elementos da lista é: ", mediaLista(lista))
+
+    elif menu == 5:
+        print(" O maior elemento da lista é: ", maiorLista(lista))
+
+    elif menu == 6:
+        print(" O menor elemento da lista é: ", menorLista(lista))    
+
+    elif menu == 7:
+        print(" Está ordenada de forma crescente?: ", estaCrescente(lista)) 
+
+    elif menu == 8:
+        print(" Está ordenada de forma decrescente?: ", estaDecrescente(lista))
+        
+    elif menu == 9:
+        elem = int(input("Que elemento deseja pesquisar na lista?: "))
+        print(" O elemento encontra-se na posição/ nas posições: ", unico(lista, elem))
+
+    menu = int(input("""Menu:
+    (1)Criar Lista 
+    (2) Ler Lista
+    (3) Soma
+    (4) Média
+    (5) Maior
+    (6) Menor
+    (7) estaOrdenada por ordem crescente
+    (8) estaOrdenada por ordem decrescente
+    (9) Procura um elemento
+    (0) Sair"""))
+
+print("A lista atualmente guardada é: ", lista)
