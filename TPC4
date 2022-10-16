@@ -1,0 +1,116 @@
+from random import randint
+
+cinema = []
+
+def listarCinema(cinema):
+    print("Filme          Lugares da sala          Vendidos")
+    print("------------------------------------------------")
+    for n in cinema:
+        filme, nLugares, vendidos = n
+        print(filme,"------------", nLugares,"------------", sorted(vendidos))
+    
+    return  print(  "Estão em exibição ", len(cinema), " filmes.")
+
+
+def lugarDisponivel(cinema, filmeDisponibilidade, vendidos):
+    res = True
+    filmeDisponibilidade = str(input("Em que filme deseja consultar a disponibilidade?: "))
+    lugar = int(input("Que lugar deseja verificar? "))
+    for sala in cinema:   
+        if filmeDisponibilidade not in sala[0]:
+            mensagem = "O filme escolhido não se encontra, atualmente, em exibição."    
+        elif filmeDisponibilidade == sala[0]:
+            if lugar in vendidos:
+                res = False
+            if res == True:
+                mensagem = "O lugar que escolheu encontra-se vazio."
+            elif res == False:
+                mensagem = "O lugar que escolheu já se encontra ocupado."
+    
+         
+    return (mensagem)
+
+def venderBilhete(cinema, filme, lugar):
+    filme=str(input("Para que filme deseja comprar bilhete?: "))
+    for sala in cinema:
+        if filme == sala[0]:
+            adquiridos = sorted(vendidos)
+            lugar = int(input("Para que lugar? Os ocupados são os seguintes: " + str(adquiridos) + " : "))
+            while lugar > nLugares:
+                lugar = int(input("A sala só tem "+ str(nLugares) + " lugares. Escolha um lugar que se encontre na sala: "))
+            while lugar in adquiridos:
+                lugar = int(input("""O lugar que escolheu já se encontra ocupado. 
+                Os ocupados são os seguintes: """ + str(sorted(adquiridos)) + ":"))
+            
+            vendidos.append(lugar)
+            mensagem = print("O seu bilhete está comprado. É o lugar número: ", lugar)
+        else:    
+            mensagem = print("O filme escolhido não se encontra, atualmente, em exibição.")
+    return (mensagem)
+
+def disponibilidade(cinema):
+    auxiliar = str(input("De que filme deseja consultar a disponibilidade?: "))
+    for sala in cinema:
+        if auxiliar == sala[0]:
+            print("     Filme               Lugares disponíveis    ")
+            print("------------------------------------------------")
+            print( filme ,"-------------------------" , nLugares - len(vendidos)        )
+        else:
+            print("O filme escolhido não se encontra, atualmente, em exibição.")
+    return()
+
+def removerSala(cinema, sala):
+    filme = str(input("Deseja remover a sala associada a que filme?: "))
+    for sala in cinema:
+        if filme == sala[0]:
+            cinema.remove(sala)
+            mensagem = print("A sala foi eliminada com sucesso.")
+        else:
+            mensagem = print("O filme escolhido não se encontra, atualmente, em exibição.")
+    return(mensagem)
+
+print("------------------------------------------------")
+menu = int(input("""(1) Ver Cartaz 
+(2) Inserir sala
+(3) Vender bilhete
+(4) Consultar disponibilidade de sala
+(5) Consultar disponibilidade de lugar
+(6) Remover sala
+(0) Sair
+Opção escolhida: """))
+print("------------------------------------------------")
+
+while menu != 0:
+   
+    if menu == 1:
+        listarCinema(cinema)
+    elif menu == 2:
+        filme =str(input("Que filme estará em exibição nesta sala?: "))
+        nLugares =int(input("Quantos lugares disponíveis tem esta sala?: "))
+        vendidos = []
+        sala = filme
+        sala = (filme, nLugares, vendidos)
+        if sala  not in cinema:
+            cinema.append(sala)
+            print("Sala inserida com sucesso. ")
+        else:
+            print("O filme que deseja inserir já foi inserido numa sala.")
+    elif menu == 3:
+        venderBilhete(cinema,filme,vendidos)
+    elif menu == 4:
+        disponibilidade(cinema)
+    elif menu == 5:   
+        print(lugarDisponivel(cinema, filme, vendidos))
+    elif menu == 6:
+        print(removerSala(cinema, sala))
+
+    print("------------------------------------------------")
+    menu = int(input("""    (1) Ver Cartaz 
+    (2) Inserir sala
+    (3) Vender bilhete
+    (4) Consultar disponibilidade de sala
+    (5) Consultar disponibilidade de lugar
+    (6) Remover sala
+    (0) Sair
+    Opção escolhida: """))
+    print("------------------------------------------------")
