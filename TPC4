@@ -40,7 +40,7 @@ def venderBilhete(cinema, filme, lugar):
                 lugar = int(input("A sala só tem "+ str(nLugares) + " lugares. Escolha um lugar que se encontre na sala: "))
             while lugar in adquiridos:
                 lugar = int(input("""O lugar que escolheu já se encontra ocupado. 
-                Os ocupados são os seguintes: """ + str(sorted(adquiridos)) + ":"))
+                Os ocupados são os seguintes: """ + str(sorted(adquiridos)) + " : "))
             
             vendidos.append(lugar)
             mensagem = print("O seu bilhete está comprado. É o lugar número: ", lugar)
@@ -76,6 +76,7 @@ menu = int(input("""(1) Ver Cartaz
 (4) Consultar disponibilidade de sala
 (5) Consultar disponibilidade de lugar
 (6) Remover sala
+(7) Comprar Pack de bilhetes
 (0) Sair
 Opção escolhida: """))
 print("------------------------------------------------")
@@ -103,6 +104,27 @@ while menu != 0:
         print(lugarDisponivel(cinema, filme, vendidos))
     elif menu == 6:
         print(removerSala(cinema, sala))
+    elif menu == 7:
+        auxiliar = str(input("Para que filme deseja comprar pack de bilhetes?: "))
+        for sala in cinema:
+            if auxiliar == sala[0]:
+                print("O filme tem " , nLugares - len(vendidos) , " lugares disponíveis.")
+                pack = int(input("Quantos bilhetes deseja comprar?: "))              
+                packLista = []
+                while pack != 0:
+                    lugar = randint(0,nLugares)
+                    if lugar in vendidos:
+                        while lugar in vendidos:
+                            lugar = randint(0,nLugares)
+                    packLista.append(lugar)
+                    vendidos.append(lugar)
+                    pack = pack - 1
+
+                print("Foram comprados " + str(len(packLista)) + " bilhetes, para os lugares: " + str(sorted(packLista)))
+            else:
+                print("O filme escolhido não se encontra, atualmente, em exibição.")
+       
+
 
     print("------------------------------------------------")
     menu = int(input("""    (1) Ver Cartaz 
@@ -111,6 +133,7 @@ while menu != 0:
     (4) Consultar disponibilidade de sala
     (5) Consultar disponibilidade de lugar
     (6) Remover sala
+    (7) Comprar Pack de bilhetes
     (0) Sair
     Opção escolhida: """))
     print("------------------------------------------------")
