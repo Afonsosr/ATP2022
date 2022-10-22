@@ -1,0 +1,166 @@
+#Lista com os dados todos do hospital
+hospital = []
+tabela = open("myheart.csv", "r")
+for linha in tabela:
+    dados = tuple(linha[:-1].split(","))
+    idade,sexo,tensão,colesterol,batimento,temDoença = dados
+    hospital.append(dados)
+
+doentes = []
+for dados in hospital:
+    idade,sexo,tensão,colesterol,batimento,temDoença = dados
+    for temDoença in dados:
+        if temDoença == "1":
+            doentes.append(dados)
+
+#-----------------------------------------------------------------------------------------------
+
+def listarHospital ():
+    print("\n","---------------------------------------------------------------")  
+    print("Idade    Sexo    Tensão     Colesterol    Batimentos    Tem Doença")
+    for dados in hospital:
+        idade,sexo,tensão,colesterol,batimento,temDoença = dados
+        print(" ",idade,"-----",sexo,"-----",tensão,"-------",colesterol,"----------",batimento,"---------",temDoença)
+    tabela.close()
+    return()
+
+
+def distPorSexo():
+    contCM = 0
+    contCF = 0
+    contSM = 0
+    contSF = 0
+    disSexo = {"M":contCM , "F":contCF}
+
+    for dados in hospital:   
+       
+        idade,sexo,tensão,colesterol,batimento,temDoença = dados
+
+        if sexo == "M" and temDoença == "1":
+            contCM = contCM + 1
+            
+        elif sexo == "M" and temDoença == "0":
+            contSM = contSM + 1
+                
+        elif sexo == "F" and temDoença == "1":
+            contCF = contCF + 1
+                 
+        elif sexo == "F" and temDoença == "0":
+            contSF = contSF + 1
+
+        
+    totalPacientes = len(hospital) 
+    totalHomens = contCM + contSM
+    totalMulheres = contCF + contSF
+    percentHomens = contCM/totalHomens*100
+    percentMulheres = contCF/totalMulheres*100
+    print("-----------------------------------------")
+    print("Percentagem de Homens com doença: ", round(percentHomens,2), "%.","\n","  Total de Homens com doença: ",contCM,"\n")
+    print("Percentagem de Mulheres com doença: ", round(percentMulheres,2), "%.","\n","  Total de Mulheres com doença: ",contCF,"\n")
+    print("Total de homens: ",totalHomens," ; Total de Mulheres: ",totalMulheres,"\n")
+    print("Total de utentes na base de dados do hospital: ", totalPacientes)
+
+    import matplotlib.pyplot as plt
+    left = [1, 4, 7, 10]
+    height = [contCM,totalHomens,contCF,totalMulheres]
+    tick_label = ["Homens com doença","Total homens","Mulheres com doença","Total mulheres"]
+    plt.bar(left, height, tick_label = tick_label,
+            width = 0.8, color = ['red' , 'yellow'])
+    plt.title('Distribuição da doença (por sexo)')
+    plt.show()
+
+    return()
+
+def distPorIdades():
+    listaIdades = [0]
+    for n in range(4,90,5):
+        listaIdades.append(n)
+    disIdades={}
+    n = 0
+    for dados in doentes:
+        cond = 0
+        idade,sexo,tensão,colesterol,batimento,temDoença = dados
+        for idade in dados :  
+            for n in range(0,len(listaIdades)):
+                while cond == 0 :
+                    if listaIdades[n] <= int(idade) and int(idade) <= listaIdades[n+1] :
+                        cond = 1
+                        intervalo = (str(listaIdades[n]),str(listaIdades[n+1]))
+                        chave= "-".join(intervalo)
+                        if chave in disIdades.keys():
+                            disIdades[chave] = disIdades[chave] + 1
+                        else:
+                            disIdades[chave] = 1
+                    else:
+                        n = n+1
+    print("\n","-----------------------------------------")                    
+    print("DISTRIBUIÇÃO DA DOENÇA SEGUNDO A FAIXA ETÁRIA","\n")
+    for chave in disIdades.keys():
+        print(f'Faixa etária: {chave} | Nº de doentes: {disIdades[chave]}')
+        print("-----------------------------------------")
+
+    return()
+
+def distPorColesterol():
+    listaColesterol = []
+    for f in range(0,626,25):
+        listaColesterol.append(f)
+    disColesterol={}
+    f = 0
+    for dados in doentes:
+        cond = 0
+        
+        for colesterol in dados :  
+            idade,sexo,tensão,colesterol,batimento,temDoença = dados 
+            for f in range(0,len(listaColesterol)-1):
+                while cond == 0 :
+                    if listaColesterol[f] <= int(colesterol) and int(colesterol) <= listaColesterol[f+1] :
+                        cond = 1
+                        intervalo = (str(listaColesterol[f]),str(listaColesterol[f+1]))
+                        chave2= "-".join(intervalo)
+                        if chave2 in disColesterol.keys():
+                            disColesterol[chave2] = disColesterol[chave2] + 1
+                        else:
+                            disColesterol[chave2] = 1
+                    else:
+                        f = f+1
+    print("\n","------------------------------------------------")                    
+    print("DISTRIBUIÇÃO DA DOENÇA SEGUNDO OS NÍVEIS DE COLESTEROL","\n")
+    for chave2 in disColesterol.keys():
+        print(f'Níveis de Colesterol: {chave2} | Nº de doentes: {disColesterol[chave2]}')
+        print("-------------------------------------------------")
+    return()
+#_________________________________________________
+
+print("\n","DISTRIBUIÇÃO DA DOENÇA DE CORAÇÃO ", "\n")
+menu = int(input("""Ver distribuição da doença por:
+1 - Sexo
+2 - Idades
+3 - Níveis de colesterol
+4 - Ver base de dados completa
+0 - Sair
+Opção: """))
+
+while menu != 0:
+    if menu == 1:
+        distPorSexo()
+
+    elif menu == 2:
+        distPorIdades()
+
+    elif menu == 3:
+        distPorColesterol()
+
+    elif menu == 4:
+        listarHospital()
+
+    print("\n","DISTRIBUIÇÃO DA DOENÇA DE CORAÇÃO ", "\n")
+    menu = int(input("""Ver distribuição da doença por:
+    1 - Sexo
+    2 - Idades
+    3 - Níveis de colesterol
+    4 - Ver base de dados completa
+    0 - Sair
+    Opção: """))
+
+print("Aplicação encerrada. Obrigado pela sua utilização. ","\n")
