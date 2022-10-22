@@ -99,6 +99,15 @@ def distPorIdades():
         print(f'Faixa etária: {chave} | Nº de doentes: {disIdades[chave]}')
         print("-----------------------------------------")
 
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+    y = np.array([6,19,27,51,83,114,101,45,17,5])
+    mylabels = ["29-34", "34-39", "39-44", "44-49","49-54","54-59","59-64","64,69","69-74","74-79"]
+    plt.title("DISTRIBUIÇÃO DA DOENÇA SEGUNDO A FAIXA ETÁRIA")
+    plt.pie(y, labels = mylabels)
+    plt.show()
+
     return()
 
 def distPorColesterol():
