@@ -1,0 +1,146 @@
+import csv
+import matplotlib.pyplot as plt
+
+
+def readDataset(fnome):
+    f = open(fnome, encoding='utf-8')
+    f.readline()
+    csv_reader = csv.reader(f, delimiter=';')
+    obras = []
+    for row in csv_reader:
+        obras.append(tuple(row))
+    # também dava para ter o obras.remove([0]) aqui, e eliminar o f.readline() da linha 5
+    return obras
+
+def contaObras(obras):
+    res = len(obras)
+    return res
+
+def listarObras(obras):
+    print("\n","Título                         | Descrição                                          | Compositor                     | Ano de Criação ")
+    print("---------------------------------------------------------------------------------------------------------------------------------------")
+    for composicao in obras:
+        titulo,desc,anoCriacao,_,compositor,*_ = composicao
+        print(f" {titulo[0:30]:30} | {desc[0:50]:50} | {compositor[0:30]:30} | {anoCriacao:14}")
+    return()
+
+def TitAno(obras):
+    listaTitAno = []
+    for composicao in obras:
+         titulo,_,anoCriacao,*_ = composicao
+         listaTitAno.append((titulo,anoCriacao))
+    listaTitAno.sort()
+    print("\n","Título                         | Ano de Criação ")
+    print("-------------------------------------------------")
+    for parTitAno in listaTitAno:
+        titulo,anoCriacao = parTitAno
+        print(f" {titulo[0:30]:30} | {anoCriacao:14}")
+    return ()
+
+def AnoTit(obras):
+    listaAnoTit = []
+    for composicao in obras:
+         titulo,_,anoCriacao,*_ = composicao
+         listaAnoTit.append((anoCriacao,titulo))
+    listaAnoTit.sort()
+    print("\n","Ano de Criação |              Título            ")
+    print("-------------------------------------------------")
+    for parTitAno in listaAnoTit:
+        anoCriacao,titulo = parTitAno
+        print(f" {anoCriacao:14} | {titulo[0:30]:30}")
+    return ()
+
+def dicAnoObras(obras):
+    dicAnos={}
+    for composicao in obras:
+        titulo,_,anoCriacao,*_ = composicao
+        if anoCriacao in dicAnos.keys():             
+            dicAnos[anoCriacao].append(titulo)
+        else:
+            dicAnos[anoCriacao] = [titulo]
+    return dicAnos
+
+def listarCompositores(obras):
+    listaComp = []
+    for composicao in obras:
+        _,_,_,_,compositor,*_ = composicao
+        if compositor not in listaComp:
+            listaComp.append(compositor)
+    listaComp.sort()
+    print("\n","      Lista De Compositores      ")
+    print("---------------------------------")
+    for n in listaComp:
+        print(" -",n)
+    return ()
+
+def tabelarDistribuicao(distrib):
+    print("")
+    for par in distrib:
+        print(f"{par[0:17]:25} | {distrib[par]}")
+    print("")
+    return()
+
+def distObrasPeriodo(obras):
+    disObrPer={}
+    for _,_,_,periodo,*_ in obras:
+        if periodo in disObrPer.keys():
+            disObrPer[periodo] = disObrPer[periodo] + 1
+        else:
+            disObrPer[periodo]=1
+    return disObrPer
+
+def distObrasAno(obras):
+    disObrAno={}
+    for _,_,anoCriacao,*_ in obras:
+        if anoCriacao in disObrAno.keys():
+            disObrAno[anoCriacao] = disObrAno[anoCriacao] + 1
+        else:
+            disObrAno[anoCriacao]=1
+    return disObrAno
+
+def distObrasComp(obras):
+    disObrComp={}
+    for _,_,_,_,compositor,*_ in obras:
+        if compositor in disObrComp.keys():
+            disObrComp[compositor]= disObrComp[compositor] + 1
+        else:
+            disObrComp[compositor]=1
+    return disObrComp
+
+def plotDistrib(distrib):
+    plt.bar(distrib.keys(), distrib.values(),color = ['darkslategray','navy' ,'blue','dodgerblue','skyblue'])
+    plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation=45)
+    plt.title("Gráfico da distribuição das obras")
+    plt.show()
+    return
+
+def desenharGrafico(obras):
+    opcao = int(input("""
+--------------------------------------------------------
+                    MENU DE GRÁFICOS
+--------------------------------------------------------
+Deseja consultar o gráfico de que tipo de distribuição?:
+1- Distribuição das obras por período
+2- Distribuição das obras por ano
+3- Distribuição das obras por compositor
+Opção: """))
+    if opcao == 1:
+        plotDistrib(distObrasPeriodo(obras))
+    elif opcao == 2:
+        plotDistrib(distObrasAno(obras))
+    elif opcao == 3:
+        plotDistrib(distObrasComp(obras))
+
+def tuplCompObras(obras):
+    listaTuplos = list(inversEstrut(obras).items())
+    return listaTuplos
+
+
+def inversEstrut(obras):
+    disObrCompAux={}
+    for titulo,_,_,_,compositor,*_ in obras:
+        if compositor in disObrCompAux.keys():
+            disObrCompAux[compositor].append(titulo)
+        else:
+            disObrCompAux[compositor]= [titulo]
+    return disObrCompAux
