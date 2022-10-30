@@ -144,3 +144,17 @@ def inversEstrut(obras):
         else:
             disObrCompAux[compositor]= [titulo]
     return disObrCompAux
+
+def pesqPorComp(obras):
+    print("")
+    comp = str(input("""Pesquisa de obras por nome do compositor.
+Por favor, escreva o nome do compositor exatamente como aparece na listagem de compositores.
+Inserir nome: """))
+    print("")
+    tuplAux = tuplCompObras(obras)
+    for p in tuplAux:
+        compositor,listaObras = p
+        if str(comp) == str(compositor):
+            print("Obras compostas por ",comp,": ","\n")
+            print(listaObras)
+            print("")
