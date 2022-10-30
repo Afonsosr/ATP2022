@@ -15,6 +15,7 @@ menu = int(input("""
 7 - Distribuição das Obras por Ano
 8 - Distribuição das Obras por Compositor
 9 - Visualização de Gráficos
+10 - Pesquisa de obras compostas por determinado compositor
 0 - Sair
 Opção: """))
 
@@ -44,7 +45,10 @@ while menu != 0:
     elif menu == 8:
         obras.tabelarDistribuicao(obras.distObrasComp(myObras))            
     elif menu == 9:
-        obras.desenharGrafico(myObras)                        
+        obras.desenharGrafico(myObras)  
+    elif menu == 10:
+       obras.pesqPorComp(myObras)
+            
 
     print("------------------------------------------")
     print("ANÁLISE DE BASE DE DADOS DE OBRAS MUSICAIS")
@@ -59,6 +63,7 @@ while menu != 0:
 7 - Distribuição das Obras por Ano
 8 - Distribuição das Obras por Compositor
 9 - Visualização de Gráficos
+10 - Pesquisa de obras compostas por determinado compositor
 0 - Sair
 Opção: """))
 
