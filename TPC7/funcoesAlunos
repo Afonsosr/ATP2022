@@ -1,0 +1,107 @@
+import csv
+import matplotlib.pyplot as plt
+
+def readDataset(ficheiro):
+    f = open(ficheiro, encoding='utf-8')
+    f.readline()
+    csv_reader = csv.reader(f, delimiter=',')
+    listaUni = []
+    for linha in csv_reader:
+        listaUni.append(tuple(linha))
+    return listaUni
+
+dadosUni = readDataset("alunos.csv")
+
+
+
+
+def distribPorCurso(listalunos):
+    cursoAlunos = {}
+    for aluno in listalunos:
+            _,_,curso,_,_,_,_ = aluno
+            if curso in cursoAlunos.keys():
+                cursoAlunos[curso] = cursoAlunos[curso] + 1
+            else:
+                cursoAlunos[curso] = 1
+
+    return cursoAlunos
+
+#print(distribPorCurso(dadosUni))
+
+def listarDados(listalunos):
+    print("\n"," ID  |              NOME              |  CURSO  | TPC1 | TPC2 | TPC3 | TPC4 | MÉDIA | ESCALÃO ")
+    print("----------------------------------------------------------------------------------------------")
+    for aluno in listalunos:
+        id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,escalao = aluno
+        print(f"{id:^5} | {nome:30} | {curso:7} | {tpc1:^4} | {tpc2:^4} | {tpc3:^4} | {tpc4:^4} | {media:^5} | {escalao:^7}")
+
+    return()
+
+def adicionarMedia(listalunos):
+    listaComMedia=[]
+    for id,nome,curso,tpc1,tpc2,tpc3,tpc4 in listalunos:    
+        media = (int(tpc1)+int(tpc2)+int(tpc3)+int(tpc4))/4
+        if 1 <= media < 4:
+            aluno=(id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,"E")
+        elif 4 <= media < 8:
+            aluno=(id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,"D")
+        elif 8 <= media < 12:
+            aluno=(id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,"C")
+        elif 12 <= media < 16:
+            aluno=(id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,"B")
+        elif 16 <= media <= 20:           
+            aluno=(id,nome,curso,tpc1,tpc2,tpc3,tpc4,media,"A") 
+       
+        listaComMedia.append(aluno)
+
+    return listaComMedia
+
+def distribPorEscalão(listalunos):
+    escalaoAlunos = {}
+    for aluno in listalunos:
+        _,_,_,_,_,_,_,_,escalao = aluno
+        if escalao in escalaoAlunos.keys():
+            escalaoAlunos[escalao] = escalaoAlunos[escalao] + 1
+        else:
+            escalaoAlunos[escalao] = 1
+    return escalaoAlunos
+
+#print(distribPorEscalão(adicionarMedia(dadosUni)))
+
+def tabelarDistribuicao(distrib):
+    print("\n-----DISTRIBUIÇÃO-----")
+    for n in distrib:
+        print(f"| {n:^11} | {distrib[n]:^4} |")
+        print("----------------------")
+
+    return()
+
+#tabelarDistribuicao((distribPorEscalão(adicionarMedia(dadosUni))))
+#tabelarDistribuicao((distribPorCurso(dadosUni)))
+
+def plotDistrib(distrib):
+    if distrib == distribPorEscalão(adicionarMedia(dadosUni)):
+        plt.plot(distrib.keys(), distrib.values())
+        plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation=45)
+        plt.title("DISTRIBUIÇÃO DAS MÉDIAS POR ESCALÃO")
+        plt.show()
+    elif distrib == distribPorCurso(dadosUni):
+        plt.plot(distrib.keys(), distrib.values())
+        plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation=45)
+        plt.title("DISTRIBUIÇÃO DOS ALUNOS POR CURSO")
+        plt.show()
+    return
+
+def menuGráficos():
+    print("\n------------------------------------------")
+    print("|           MENU DE GRÁFICOS             |")
+    print("------------------------------------------")
+    menuaux = int(input("""
+1 - Gráfico da Distribuição por Curso
+2 - Gráfico da distribuição por Escalão
+0 - Sair
+Opção: """))
+    if menuaux == 1:
+        plotDistrib((distribPorCurso(dadosUni)))
+    elif menuaux == 2:
+        plotDistrib(distribPorEscalão(adicionarMedia(dadosUni)))
