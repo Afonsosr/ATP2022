@@ -1,0 +1,37 @@
+import funcoesAlunos
+
+dadosUni = funcoesAlunos.readDataset("alunos.csv")
+
+print("\n------------------------------------------")
+print("|   ANÁLISE DE BASE DE DADOS DE ALUNOS   |")
+print("------------------------------------------")
+opcao = int(input("""
+1 - Listar Base de Dados dos Alunos
+2 - Distribuição dos Alunos por Curso
+3 - Distribuição dos Alunos por Escalão
+4 - Visualização de Gráficos das Distibuições
+0 - Sair
+Opção: """))
+
+while opcao != 0:
+    if opcao == 1:
+        funcoesAlunos.listarDados(funcoesAlunos.adicionarMedia(dadosUni))
+    elif opcao == 2:
+        funcoesAlunos.tabelarDistribuicao((funcoesAlunos.distribPorCurso(dadosUni)))
+    elif opcao == 3:
+        funcoesAlunos.tabelarDistribuicao((funcoesAlunos.distribPorEscalão(funcoesAlunos.adicionarMedia(dadosUni))))
+    elif opcao == 4:
+        funcoesAlunos.menuGráficos()
+
+    print("\n------------------------------------------")
+    print("|   ANÁLISE DE BASE DE DADOS DE ALUNOS   |")
+    print("------------------------------------------")
+    opcao = int(input("""
+1 - Listar Base de Dados dos Alunos
+2 - Distribuição dos Alunos por Curso
+3 - Distribuição dos Alunos por Escalão
+4 - Visualização de Gráficos das Distibuições
+0 - Sair
+Opção: """))
+
+print("\n","Aplicação encerrada. Obrigado pela sua utilização.","\n")
