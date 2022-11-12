@@ -1,0 +1,162 @@
+#------------EXERCÍCIO 1------------
+#TPC1.A
+
+def inicDiferente(s1, s2):
+    res = 0
+    n = 0
+    string1 = []
+    string2 = []
+    for carac in s1:
+        string1.append(carac)
+
+    for carac in s2:
+        string2.append(carac)
+
+    while string1[n] != string2[n]:
+        res = res + 1
+        n = n + 1
+
+        
+    return res
+
+#TPC1.B
+
+def acimaMedia(n):
+    lista=[]
+    cont = n
+    soma= 0
+    res = 0
+    while cont>0:
+        num = int(input(f"Introduza o valor nº: "))
+        lista.append(num)
+        soma = soma + num
+        cont = cont-1
+    
+    media = soma/n
+
+    for n in lista:
+        if n > media:
+            res = res + 1
+
+    return res
+
+#TPC1.C
+
+def merge(l1, l2):
+    lista = l1 + l2
+    compInicialLista = len(lista)
+    listaOrdenada = []
+    while len(listaOrdenada) < compInicialLista:
+        menor = lista[0]
+        for elem in lista[1:]:
+            if elem < menor:
+                menor = elem
+        listaOrdenada.append(menor)
+        lista.remove(menor)
+    
+    return print(listaOrdenada)
+
+#TPC1.D
+
+def figuais(f1, f2):
+    texto1 = open(f1, encoding='utf-8')
+    texto2 = open(f2, encoding='utf-8')
+    listaTexto1 = []
+    listaTexto2 = []
+    n = 0
+    aux = True
+    for linha in texto1:
+        listaTexto1.append(linha)
+    for linha in texto2:
+        listaTexto2.append(linha) 
+    while n < len(listaTexto1):
+        if listaTexto1[n] != listaTexto2[n]:
+            return False       
+        n = n + 1
+
+    return aux
+
+#------------EXERCÍCIO 2------------
+
+Filme1 = ("Meet the Parents", 2000, ["Ben Stiller","Robert De Niro",
+      "Blythe Danner","Teri Polo","Owen Wilson"], ["Comedy", "Drama"])
+Filme2 = ("Men of Honor", 2000, ["Robert De Niro","Cuba Gooding, Jr.",
+      "Charlize Theron"], ["Biography", "Drama", "Thriller"])
+Filme3 = ("Analyze That", 2002, ["Robert De Niro","Billy Crystal",
+      "Lisa Kudrow"], ["Comedy"])
+CineUM = [Filme1, Filme2, Filme3]
+
+#TPC2.A
+
+def atores(cinemateca):
+    listaElenco=[]
+    for filme in cinemateca:
+        _,_,elenco,_ = filme
+        for ator in elenco:
+            if ator not in listaElenco:
+                listaElenco.append(ator)
+    listaElenco.sort()
+
+    return listaElenco
+
+print(atores(CineUM))
+
+#TPC2.B
+
+def listarPorGenero(cinemateca, genero):
+    listaFilmesGenero = []
+    for filme in cinemateca:
+        titulo,_,_,tipos = filme
+        if genero in tipos:
+            listaFilmesGenero.append(titulo)
+    listaFilmesGenero.sort()
+            
+
+    return listaFilmesGenero
+
+print(listarPorGenero(CineUM, "Comedy"))
+
+#TPC2.C
+
+def maiorElenco( cinemateca ):
+    numAtores = 0
+    for filme in cinemateca:
+        titulo,_,elenco,_ = filme
+        numAtoresAux = len(elenco)
+        if numAtoresAux >= numAtores:
+            numAtores = numAtoresAux
+            maiorFilme = titulo
+
+
+
+    return maiorFilme
+
+print(maiorElenco(CineUM))
+
+#TPC2.D
+
+def filmePorGenero( cinemateca ):
+    distribPorgenero = {}
+    for filme in cinemateca:
+        _,_,_,genero = filme
+        for generoAux in genero:
+            if generoAux in distribPorgenero.keys():
+                distribPorgenero[generoAux] = distribPorgenero[generoAux] + 1
+            else:
+                distribPorgenero[generoAux] = 1
+    return distribPorgenero
+
+print(filmePorGenero(CineUM))
+
+#TPC2.E
+
+import matplotlib.pyplot as plt
+
+def grafico(distrib):
+    plt.bar(distrib.keys(), distrib.values(),color = ['darkslategray','navy' ,'blue','dodgerblue','skyblue'])
+    plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation=45)
+    plt.title("Número de filmes por género")
+    plt.show()
+    return
+
+grafico(filmePorGenero(CineUM))
