@@ -1,0 +1,70 @@
+import PySimpleGUI as sg
+
+sg.theme("DarkBrown3")
+
+menuInicial = [ 
+    [sg.Text("Estudo da População", font=('Arial', 36))],
+    [sg.Text("MENU", font=('Arial', 36))],
+    [sg.Text("Inserir Utilizador:", size=(15,1)),sg.Button("OK1")],
+    [sg.Text("Procurar Utilizador:", size=(15,1)), sg.Button("OK2")],
+    [sg.Text("Listar Indivíduos:", size=(15,1)), sg.Button("OK3")],
+    [sg.Text("Pesquisa Por:", size=(15,1)), sg.Button("OK4")],
+    [sg.Text("Menu Estatístico:", size=(15,1)), sg.Button("OK5")],
+    [sg.Button("Sair")]
+]
+janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150), font=('Arial', 24))
+
+
+inserirUtilizadorEsquerda = [
+    [sg.Text("Introdução de Utilizador", font=('Arial', 36))],
+    [sg.Text("Nome:",font=(20), size=(15,1)),sg.InputText(key='-NOME-',size=(20))],
+    [sg.Text("Idade:",font=(20), size=(15,1)),sg.InputText(key='-IDADE-',size=(20))],
+    [sg.Text("Género:",font=(20), size=(8,1)), sg.Radio("Masculino","sexo",default=True),
+            sg.Radio("Feminino","sexo"),
+            sg.Radio("Outro","sexo")],
+    [sg.Text("Morada", font=('Arial', 15))],
+    [sg.Text("Localidade:",font=(20), size=(15,1)),sg.InputText(key='-LOCALIDADE-',size=(20))],
+    [sg.Text("Distrito:",font=(20), size=(15,1)),sg.InputText(key='-DISTRITO-',size=(20))],
+    [sg.Text("Nº CC/BI:",font=(20), size=(15,1)),sg.InputText(key='-CCBI-',size=(20))],
+    [sg.Text("Descrição:",font=(20), size=(15,1)),sg.InputText(key='-DESCRICAO-',size=(20))],
+    [sg.Text("Profissão:",font=(20), size=(15,1)),sg.InputText(key='-PROFISSAO-',size=(20))],
+    [sg.Text("Partido Político", font=('Arial', 15))],  
+    [sg.Text("Nome por Extenso:",font=(20), size=(15,1)),sg.InputText(key='-EXTENSO-',size=(20))],
+    [sg.Text("Sigla:",font=(20), size=(15,1)),sg.InputText(key='-SILGA-',size=(20))],
+    [sg.Text("Desportos Praticados:",font=(20), size=(15,1)),sg.InputText(key='-DESPORTO-',size=(20))],
+]
+inserirUtilizadorDireita = [
+    [sg.Text("Celebridades Favoritas:0",font=(20), size=(15,1)),sg.InputText(key='-CELEBRIDADE-',size=(20))],
+    [sg.Text("Marca Carro:",font=(20), size=(15,1)),sg.InputText(key='-CARRO-',size=(20))],
+    [sg.Text("Destino Favorito:",font=(20), size=(15,1)),sg.InputText(key='-DESTINOS-',size=(20))],
+    [sg.Text("Animais Favoritos:",font=(20), size=(15,1)),sg.InputText(key='-ANIMAIS-',size=(20))],
+    [sg.Text("Atributos", font=('Arial', 15))],
+        [sg.Text("Fuma?:",font=(20), size=(15,1)), sg.Radio("Sim","fuma",default=True),
+            sg.Radio("Não","fuma")],
+        [sg.Text("Gosta de cinema?:",font=(20), size=(15,1)), sg.Radio("Sim","cinema",default=True),
+            sg.Radio("Não","cinema")],
+        [sg.Text("Gosta de viajar?:",font=(20), size=(15,1)), sg.Radio("Sim","viagem",default=True),
+            sg.Radio("Não","viagem")],
+        [sg.Text("Acorda cedo?:",font=(20), size=(15,1)), sg.Radio("Sim","acordarcedo",default=True),
+            sg.Radio("Não","acordarcedo")],
+        [sg.Text("Gosta de ler?:",font=(20), size=(15,1)), sg.Radio("Sim","ler",default=True),
+            sg.Radio("Não","ler")],
+        [sg.Text("Gosta de música?:",font=(20), size=(15,1)), sg.Radio("Sim","musica",default=True),
+            sg.Radio("Não","musica")],
+        [sg.Text("Gosta de comer?:",font=(20), size=(15,1)), sg.Radio("Sim","comer",default=True),
+            sg.Radio("Não","comer")],
+        [sg.Text("Gosta de dançar?:",font=(20), size=(15,1)), sg.Radio("Sim","dancar",default=True),
+            sg.Radio("Não","dancar")],
+        [sg.Text("Gosta de animais de estimação?:",font=(20), size=(15,1)), sg.Radio("Sim","pets",default=True),
+            sg.Radio("Não","pets")],
+    [sg.Text("Comida Favorita:",font=(20), size=(15,1)),sg.InputText(key='-COMIDA-',size=(20))]
+]
+inserirUtilizador = [
+    [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
+    [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
+]
+
+event,*_ = janelaMenuInicial.read()
+if event == "OK1":
+    janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(300,150), font=('Arial', 24)).read()
+    if '-NOME-' != "" and '-IDADE-' != "" and "-LOCALIDADE-" != "" and "-DISTRITO-" != "" and "-CCBI-" != "" and "-PROFISSAO-" != "":#ESTES VAO SER OBRIGATORIOS
