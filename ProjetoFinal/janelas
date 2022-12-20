@@ -25,10 +25,11 @@ janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150),
 
 operacaoInvalida = [ 
     [sg.Text("Operação inválida", font=('Arial', 36))],
-    [sg.Text("Os campos NOME,IDADE,LOCALIDADE,DISTRITO,CCBI e PROFISSAO tem que estar preenchidos.", font=('Arial', 36))],
+    [sg.Text("Os campos NOME,IDADE,LOCALIDADE,DISTRITO,CCBI e PROFISSAO tem que estar preenchidos.", font=('Arial', 20))],
     [sg.Button("Voltar")],
     [sg.Button("Sair")]
 ]
+janelaOperacaoInvalida = sg.Window("Projeto de ATP", operacaoInvalida, location=(150,200), font=('Arial', 24)).read()
 
 #janela de introduzir utilizador
 
@@ -139,23 +140,26 @@ menuEstatistico = [
 ]
 
 #janela com os dados do utilizador
-utilizador = [
-    [sg.Text('Nome:',populacao["pessoa"]["nome"])],
-    [sg.Text('Idade:',populacao["pessoa"]["idade"])],
-    [sg.Text('Morada:',populacao["pessoa"]["cidade"],", ",populacao["pessoa"]["distrito"])],
-    [sg.Text('BI/CC:',populacao["pessoa"]["BI"])],
-    [sg.Text('Descrição:',populacao["pessoa"]["descrição"])],
-    [sg.Text('Profissão:',populacao["pessoa"]["profissao"])],
-    [sg.Text('Partido:',populacao["pessoa"]["party_abbr"]," - ",populacao["pessoa"]["party_name"])],
-    [sg.Text('Religião:',populacao["pessoa"]["religiao"])],
-    [sg.Text('Desportos:',populacao["pessoa"]["desportos"])],
-    [sg.Text('Animais:',populacao["pessoa"]["animais"])],
-    [sg.Text('Figuras Públicas:',populacao["figura_publica_pt"]["nome"])],
-    [sg.Text('Marca do Carro:',populacao["marca_carro"]["nome"])],
-    [sg.Text('Destinos Favoritos:',populacao["destinos_favoritos"]["nome"])],
-    [sg.Text('Comida Favorita:',populacao["comida_favorita"]["nome"])],
-    [sg.Button("Voltar"),sg.Button("Sair")]
-]
+def janelaUtilizador(pessoa):
+    utilizador = [
+        [sg.Text('Nome:',populacao[pessoa["nome"]])],
+        [sg.Text('Idade:',populacao[pessoa["idade"]])],
+        [sg.Text('Morada:',populacao[pessoa["cidade"]],", ",populacao[pessoa["distrito"]])],
+        [sg.Text('BI/CC:',populacao[pessoa["BI"]])],
+        [sg.Text('Descrição:',populacao[pessoa["descrição"]])],
+        [sg.Text('Profissão:',populacao[pessoa["profissao"]])],
+        [sg.Text('Partido:',populacao[pessoa["party_abbr"]]," - ",populacao[pessoa["party_name"]])],
+        [sg.Text('Religião:',populacao[pessoa["religiao"]])],
+        [sg.Text('Desportos:',populacao[pessoa["desportos"]])],
+        [sg.Text('Animais:',populacao[pessoa["animais"]])],
+        [sg.Text('Figuras Públicas:',populacao[pessoa["figura_publica_pt"]])],
+        [sg.Text('Marca do Carro:',populacao[pessoa["marca_carro"]])],
+        [sg.Text('Destinos Favoritos:',populacao[pessoa["destinos_favoritos"]])],
+        [sg.Text('Comida Favorita:',populacao[pessoa["comida_favorita"]])],
+        [sg.Button("Voltar"),sg.Button("Sair")]
+    ]
+
 janelaUtilizador = sg.Window("Projeto de ATP", utilizador, location=(300,150), font=('Arial', 24)).read()
+
 
 
