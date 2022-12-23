@@ -9,6 +9,10 @@ populacao = populacao["pessoas"]
 #for pessoa in populacao["pessoas"]:
 #    aux.append(pessoa)
 #populacao = aux
+nomes = []
+for pessoa in populacao:
+    nomes.append(pessoa["nome"])
+nomes = sorted(nomes)
 
 
 sg.theme("DarkBrown3")
@@ -76,9 +80,9 @@ inserirUtilizador = [
     [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
     [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
 ]
+janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(100,0), font=('Arial', 24))
 
 #operacao inserir utilizador invalida
-
 operacaoInvalida = [ 
     [sg.Text("Operação inválida", font=('Arial', 36))],
     [sg.Text("Os campos NOME,IDADE,LOCALIDADE,DISTRITO,CCBI e PROFISSAO tem que estar preenchidos.", font=('Arial', 20))],
@@ -86,6 +90,8 @@ operacaoInvalida = [
     [sg.Button("Sair")]
 ]
 
+
+janelaOperacaoInvalida = sg.Window("Projeto de ATP", operacaoInvalida, location=(150,200), font=('Arial', 24))
 
 #procurar utilizador
 
@@ -102,73 +108,159 @@ procurarNome = [
     [sg.Text("Nome:", size=(18,1)),sg.InputText(key='-PROCURARNOME-',size=(20))],
     [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
 ]
+janelaProcurarNome = sg.Window("Projeto de ATP", procurarNome, location=(300,150), font=('Arial', 24))
+
 procurarCCBI = [
     [sg.Text("Número do CC/BI:", size=(18,1)),sg.InputText(key='-PROCURARCCBI-',size=(20))],
     [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
 ]
+janelaProcurarCCBI = sg.Window("Projeto de ATP", procurarCCBI, location=(300,150), font=('Arial', 24))
 
 dadosNaoEncontrados = [
         [sg.Text("Dados não reconhecidos", font=('Arial', 36))],
         [sg.Button("Voltar"),sg.Button("Sair")]]
 
-event,values = janelaMenuInicial.read()
-if event == "OK1":
-    event,values = janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(300,150), font=('Arial', 24)).read()
-    if event == "Submeter":
-        novoUtilizador = {}
-        novoUtilizador['nome'] = values['-NOME-']
-        novoUtilizador['idade'] = values['-IDADE-']
-        novoUtilizador['cidade'] = values['-LOCALIDADE-']
-        novoUtilizador['distrito'] = values['-DISTRITO-']
-        novoUtilizador['BI'] = values['-CCBI-']
-        novoUtilizador['descrição'] = values['-DESCRICAO-']
-        novoUtilizador['profissao'] = values['-PROFISSAO-']              ###################################
-        novoUtilizador['party_name'] = values['-EXTENSO-']               #### FALTA ADICIONAR ATRIBUTOS ####
-        novoUtilizador['party_abbr'] = values['-SIGLA-']                 ###################################
-        novoUtilizador['religiao'] = values['-RELIGIAO-']
-        novoUtilizador['desportos'] = values['-DESPORTOS-']
-        novoUtilizador['animais'] = values['-ANIMAIS-']
-        novoUtilizador['figura_publica_pt'] = values['-CELEBRIDADE-']
-        novoUtilizador['marca_carro'] = values['-CARRO-']
-        novoUtilizador['destinos_favoritos'] = values['-DESTINOS-']
-        novoUtilizador['comida_favorita'] = values['-COMIDA-']
+janelaDadosNaoEncontrados = sg.Window("Projeto de ATP", dadosNaoEncontrados, location=(300,150), font=('Arial', 24))
+# funcao para criar o cartao de informacoes da pessoa
 
-        if novoUtilizador['nome'] == "" or novoUtilizador['idade'] == "" or novoUtilizador['cidade'] == "" or novoUtilizador['distrito'] == "" or novoUtilizador['BI'] == "" or novoUtilizador['profissao'] == "":
-            janelaOperacaoInvalida = sg.Window("Projeto de ATP", operacaoInvalida, location=(150,200), font=('Arial', 24)).read()
+def janelaUtilizador(pessoa):
+    nome,idade,morada,bi,descricao,profissao,partidopolitico,religiao,desportos,animais,figurapublica,marcacarro,destinosfavoritos = pessoa
+    utilizador = [
+        [sg.Text('Nome:',nome)],
+        [sg.Text('Idade:',idade)],
+        [sg.Text('Morada:',morada)],  #["cidade"]],", ",pessoa["morada"["distrito"]])
+        [sg.Text('BI/CC:',bi)],
+        [sg.Text('Descrição:',descricao)],
+        [sg.Text('Profissão:',profissao)],
+        [sg.Text('Partido:',partidopolitico)],  #["party_abbr"]]," - ",pessoa['partido_politico'["party_name"]])
+        [sg.Text('Religião:',religiao)],
+        [sg.Text('Desportos:',desportos)],
+        [sg.Text('Animais:',animais)],
+        [sg.Text('Figuras Públicas:',figurapublica)],
+        [sg.Text('Marca do Carro:',marcacarro)],
+        [sg.Text('Destinos Favoritos:',destinosfavoritos)],
+        #[sg.Text('Comida Favorita:', pessoa["comida_favorita"])],    ESTÁ NO DICIONARIO DOS ATRIBUTOS
+        [sg.Button("Voltar"),sg.Button("Sair")]
+    ]
+    janelaUtilizador = sg.Window("Projeto de ATP", utilizador, location=(300,150), font=('Arial', 24)).read()
+
+while True:
+      
+    event,values = janelaMenuInicial.read()
+    if event == "OK1":
+        while True:
+            event,values = janelaInserirUtilizador.read()      
+
+            if event == sg.WIN_CLOSED or event == 'Sair':
+                break
+
+            elif event == "Voltar":
+                janelaInserirUtilizador.close() 
+
+            elif event == "Submeter":
+                novoUtilizador = {}
+                novoUtilizador['nome'] = values['-NOME-']
+                novoUtilizador['idade'] = values['-IDADE-']
+                novoUtilizador['cidade'] = values['-LOCALIDADE-']
+                novoUtilizador['distrito'] = values['-DISTRITO-']
+                novoUtilizador['BI'] = values['-CCBI-']
+                novoUtilizador['descrição'] = values['-DESCRICAO-']
+                novoUtilizador['profissao'] = values['-PROFISSAO-']              ###################################
+                novoUtilizador['party_name'] = values['-EXTENSO-']               #### FALTA ADICIONAR ATRIBUTOS ####
+                novoUtilizador['party_abbr'] = values['-SIGLA-']                 ###################################
+                novoUtilizador['religiao'] = values['-RELIGIAO-']
+                novoUtilizador['desportos'] = values['-DESPORTOS-']
+                novoUtilizador['animais'] = values['-ANIMAIS-']
+                novoUtilizador['figura_publica_pt'] = values['-CELEBRIDADE-']
+                novoUtilizador['marca_carro'] = values['-CARRO-']
+                novoUtilizador['destinos_favoritos'] = values['-DESTINOS-']
+                novoUtilizador['comida_favorita'] = values['-COMIDA-']
+
+                    
+                if novoUtilizador['nome'] == "" or novoUtilizador['idade'] == "" or novoUtilizador['cidade'] == "" or novoUtilizador['distrito'] == "" or novoUtilizador['BI'] == "" or novoUtilizador['profissao'] == "":
+                    event,_ = janelaOperacaoInvalida.read()
+                    
+                    if event == "Voltar":
+                        janelaOperacaoInvalida.close() 
+                    elif event == sg.WIN_CLOSED or event == 'Sair':
+                        break         
+                        
+                else:                 
+                    registo = {'nome': novoUtilizador['nome'], 'idade': int(novoUtilizador['idade']),
+                    'sexo': 'outro', 'morada': {'cidade': novoUtilizador['cidade'], 'distrito': novoUtilizador['distrito']}, 
+                    'BI': novoUtilizador['BI'], 'descrição':  novoUtilizador['descrição'], 
+                    'profissao': novoUtilizador['profissao'], 
+                    'partido_politico': {'party_abbr':  novoUtilizador['party_name'], 'party_name': novoUtilizador['party_abbr']}, 
+                    'religiao': novoUtilizador['religiao'], 
+                    'desportos':  novoUtilizador['desportos'].split(",") ,
+                    'animais':    novoUtilizador['animais'].split(","), 
+                    'figura_publica_pt':  novoUtilizador['figura_publica_pt'].split(",") , 'marca_carro': novoUtilizador['marca_carro'], 
+                    'destinos_favoritos':novoUtilizador['destinos_favoritos'].split(","), 
+                    'atributos': {'fumador': False, 'gosta_cinema': False, 'gosta_viajar': True, 'acorda_cedo': True, 'gosta_ler': False, 
+                    'gosta_musica': False, 'gosta_comer': True, 'gosta_animais_estimacao': False, 'gosta_dancar': True,
+                    'comida_favorita': novoUtilizador['comida_favorita'] }}
+                    populacao.append(registo)
+                    print("ola")
+               
+
+    elif event == "OK2":
+        while True:
+            event, values = janelaProcurarUtilizador.read()
+            if event == 'Nome':           
+                event, values =janelaProcurarNome.read()
+                if event == "Submeter":
+                        for pessoa in populacao:
+                            if values['-PROCURARNOME-'] in pessoa["nome"]:
+                                print(pessoa["nome"])
+                            else:
+                                event,values = janelaDadosNaoEncontrados.read()
+                                if event == "Voltar":
+                                    janelaDadosNaoEncontrados.close()
+                                elif event == sg.WIN_CLOSED or event == 'Sair':
+                                    break
+                elif event == "Voltar":
+                    janelaProcurarNome.close()
+                elif event == sg.WIN_CLOSED or event == 'Sair':
+                    break
+            elif event == 'CC/BI':                
+                event, values = janelaProcurarCCBI.read()        
+                if event == "Submeter":
+                        for pessoa in populacao:
+                            if values['-PROCURARCCBI-'] in pessoa['BI']:
+                                print(pessoa["nome"])
+                            else:
+                                event,values = janelaDadosNaoEncontrados.read()
+                                if event == "Voltar":
+                                    janelaDadosNaoEncontrados.close()
+                                elif event == sg.WIN_CLOSED or event == 'Sair':
+                                    break
+                elif event == "Voltar":
+                    janelaProcurarCCBI.close()
+                elif event == sg.WIN_CLOSED or event == 'Sair':
+                    break
+            elif event == "Voltar":
+                janelaProcurarUtilizador.close()
+            elif event == sg.WIN_CLOSED or event == 'Sair':
+                break
+
+    elif event == "OK3":
+
+        listarIndividuos = [
+        [sg.Text("Lista de indivíduos presentes na BD:", size=(13,1)),
+        sg.Listbox(nomes, size=(20,12),key ='-INDIVIDUO-', select_mode = sg.LISTBOX_SELECT_MODE_SINGLE)],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
         
-        elif novoUtilizador['nome'] != "" and novoUtilizador['idade'] != "" and novoUtilizador['cidade'] != "" and novoUtilizador['distrito'] != "" and novoUtilizador['BI'] != "" and novoUtilizador['profissao'] != "":#ESTES VAO SER OBRIGATORIOS
-            registo = {'nome': novoUtilizador['nome'], 'idade': int(novoUtilizador['idade']),
-            'sexo': 'outro', 'morada': {'cidade': novoUtilizador['cidade'], 'distrito': novoUtilizador['distrito']}, 
-            'BI': novoUtilizador['BI'], 'descrição':  novoUtilizador['descrição'], 
-            'profissao': novoUtilizador['profissao'], 
-            'partido_politico': {'party_abbr':  novoUtilizador['party_name'], 'party_name': novoUtilizador['party_abbr']}, 
-            'religiao': novoUtilizador['religiao'], 
-            'desportos':  novoUtilizador['desportos'].split(",") ,
-            'animais':    novoUtilizador['animais'].split(","), 
-            'figura_publica_pt':  novoUtilizador['figura_publica_pt'].split(",") , 'marca_carro': novoUtilizador['marca_carro'], 
-            'destinos_favoritos':novoUtilizador['destinos_favoritos'].split(","), 
-            'atributos': {'fumador': False, 'gosta_cinema': False, 'gosta_viajar': True, 'acorda_cedo': True, 'gosta_ler': False, 
-            'gosta_musica': False, 'gosta_comer': True, 'gosta_animais_estimacao': False, 'gosta_dancar': True,
-            'comida_favorita': novoUtilizador['comida_favorita'] }}
-            populacao.append(registo)
-            print(populacao)
+        janelaListarIndividuos = sg.Window("Projeto de ATP", listarIndividuos, location=(300,150), font=('Arial', 24))
 
-elif event == "OK2":
-    event, values = janelaProcurarUtilizador.read()
-    if event == 'Nome':
-        event, values =janelaProcurarNome = sg.Window("Projeto de ATP", procurarNome, location=(300,150), font=('Arial', 24)).read()
-        if event == "Submeter":
-            for pessoa in populacao:
-                if values['-PROCURARNOME-'] in pessoa["nome"]:
-                    print(pessoa["nome"])
-            else:
-                janelaDadosNaoEncontrados = sg.Window("Projeto de ATP", dadosNaoEncontrados, location=(300,150), font=('Arial', 24)).read()
-    elif event == 'CC/BI':
-        event, values = janelaProcurarCCBI = sg.Window("Projeto de ATP", procurarCCBI, location=(300,150), font=('Arial', 24)).read()        
-        if event == "Submeter":
-            for pessoa in populacao:
-                if values['-PROCURARCCBI-'] in pessoa['BI']:
-                    print(pessoa["NOME"])
-            else:
-                janelaDadosNaoEncontrados = sg.Window("Projeto de ATP", dadosNaoEncontrados, location=(300,150), font=('Arial', 24)).read()
+        while True:
+            event, values = janelaListarIndividuos.read()
+        
+            if event == "Procurar":
+                print("hello")
+            if event == sg.WIN_CLOSED or event == 'Sair':
+                break
+            if event == "Voltar":
+                janelaListarIndividuos.close()
+
 
