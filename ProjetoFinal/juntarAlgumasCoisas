@@ -121,6 +121,17 @@ dadosNaoEncontrados = [
         [sg.Button("Voltar"),sg.Button("Sair")]]
 
 janelaDadosNaoEncontrados = sg.Window("Projeto de ATP", dadosNaoEncontrados, location=(300,150), font=('Arial', 24))
+
+#Pesquisar por:
+
+pesquisarPor = [
+        [sg.Text('Pesquisar por:')],
+        [sg.Listbox(values=sg.theme_list(), size=(20, 12), key='-LIST-', enable_events=True)],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+]
+janelaPesquisarPor = sg.Window("Projeto de ATP", pesquisarPor, location=(300,150), font=('Arial', 24))
+
+
 # funcao para criar o cartao de informacoes da pessoa
 
 def janelaUtilizador(pessoa):
@@ -143,6 +154,7 @@ def janelaUtilizador(pessoa):
         [sg.Button("Voltar"),sg.Button("Sair")]
     ]
     janelaUtilizador = sg.Window("Projeto de ATP", utilizador, location=(300,150), font=('Arial', 24)).read()
+
 
 while True:
       
@@ -182,8 +194,8 @@ while True:
                     
                     if event == "Voltar":
                         janelaOperacaoInvalida.close() 
-                    elif event == sg.WIN_CLOSED or event == 'Sair':
-                        break         
+                    if event == sg.WIN_CLOSED or event == 'Sair':
+                        exit()     
                         
                 else:                 
                     registo = {'nome': novoUtilizador['nome'], 'idade': int(novoUtilizador['idade']),
@@ -226,7 +238,7 @@ while True:
                 event, values = janelaProcurarCCBI.read()        
                 if event == "Submeter":
                         for pessoa in populacao:
-                            if values['-PROCURARCCBI-'] in pessoa['BI']:
+                            if values['-PROCURARCCBI-'] in pessoa["BI"]:
                                 print(pessoa["nome"])
                             else:
                                 event,values = janelaDadosNaoEncontrados.read()
@@ -258,9 +270,26 @@ while True:
         
             if event == "Procurar":
                 print("hello")
-            if event == sg.WIN_CLOSED or event == 'Sair':
+            elif event == sg.WIN_CLOSED or event == 'Sair':
                 break
-            if event == "Voltar":
+            elif event == "Voltar":
                 janelaListarIndividuos.close()
 
+    elif event == "OK4":
+        while True:
+            event, values = janelaPesquisarPor.read()
+        
+            if event == "Procurar":
+                print("hello")
+            elif event == sg.WIN_CLOSED or event == 'Sair':
+                break
+            elif event == "Voltar":
+                janelaPesquisarPor.close()
+
+    elif event == "OK5":
+        pass
+
+    elif event == sg.WIN_CLOSED or event == 'Sair':
+        break
+        
 
