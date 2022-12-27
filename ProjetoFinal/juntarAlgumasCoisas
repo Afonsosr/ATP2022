@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import json
+import matplotlib.pyplot as plt
 
 with open("dataset.json", encoding='utf-8') as dataset:
     populacao = json.load(dataset)
@@ -26,6 +27,7 @@ menuInicial = [
     [sg.Text("Listar Indivíduos:", size=(15,1)), sg.Button("OK3")],
     [sg.Text("Pesquisa Por:", size=(15,1)), sg.Button("OK4")],
     [sg.Text("Menu Estatístico:", size=(15,1)), sg.Button("OK5")],
+    [sg.Text("Adicionar Nova Base de Dados:", size=(15,1)), sg.Button("OK6")],
     [sg.Button("Sair")]
 ]
 janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150), font=('Arial', 24))
@@ -122,14 +124,86 @@ dadosNaoEncontrados = [
 
 janelaDadosNaoEncontrados = sg.Window("Projeto de ATP", dadosNaoEncontrados, location=(300,150), font=('Arial', 24))
 
-#Pesquisar por:
 
-pesquisarPor = [
-        [sg.Text('Pesquisar por:')],
-        [sg.Listbox(values=sg.theme_list(), size=(20, 12), key='-LIST-', enable_events=True)],
-        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
-]
-janelaPesquisarPor = sg.Window("Projeto de ATP", pesquisarPor, location=(300,150), font=('Arial', 24))
+
+#Distribuição dos indivíduos por desporto
+def distribuição_desporto(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        for sport in pessoa['desportos']:
+            if sport in distrib.keys():
+                distrib[sport] = distrib[sport] + 1
+            else:
+                distrib[sport] = 1
+    return distrib
+#Distribuição dos indivíduos por animais
+def distribuição_animais(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        for animal in pessoa['animais']:
+            if animal in distrib.keys():
+                distrib[animal] = distrib[animal] + 1
+            else:
+                distrib[animal] = 1
+    return distrib
+#Distribuição dos indivíduos por figura publica
+def distribuição_figuraPublica(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        for celebridade in pessoa['figura_publica_pt']:
+            if celebridade in distrib.keys():
+                distrib[celebridade] = distrib[celebridade] + 1
+            else:
+                distrib[celebridade] = 1
+    return distrib
+#Distribuição dos indivíduos por destinos favoritos
+def distribuição_destinosFavoritos(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        for destino in pessoa['destinos_favoritos']:
+            if destino in distrib.keys():
+                distrib[destino] = distrib[destino] + 1
+            else:
+                distrib[destino] = 1
+    return distrib
+#Distribuição dos indivíduos por religiao
+def distribuição_religiao(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        if pessoa["religiao"] in distrib.keys():
+            distrib[pessoa["religiao"]] = distrib[pessoa["religiao"]] + 1
+        else:
+            distrib[pessoa["religiao"]] = 1
+    return distrib
+#Distribuição dos indivíduos por profissao
+
+def distribuição_profissao(populacao):
+    distrib = {}
+    for pessoa in populacao:
+        if pessoa["profissao"] in distrib.keys():
+            distrib[pessoa["profissao"]] += 1
+        else:
+            distrib[pessoa["profissao"]] = 1
+    return distrib
+
+   #Top 10
+def ordenaValores(v):
+    return v[1]
+
+def top10(distrib):
+    valores = list(distrib.items())
+    valores.sort(key = ordenaValores)
+    novaDistrib = dict(valores[-10:])
+    return novaDistrib
+
+#Gráficos das distribuições
+def plotdistrib(distrib):
+    plt.plot(distrib.keys(), distrib.values())
+    plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation = 45)
+    plt.title("Distribuição dos indivíduos - TOP 10")
+    plt.show()
+    return
+
 
 
 # funcao para criar o cartao de informacoes da pessoa
@@ -276,6 +350,14 @@ while True:
                 janelaListarIndividuos.close()
 
     elif event == "OK4":
+
+        pesquisarPor = [
+        [sg.Text('Pesquisar por:')],
+        [sg.Listbox(["a","b","c","d"], size=(20,12),key ='-PESQUISAPOR-', select_mode = sg.LISTBOX_SELECT_MODE_SINGLE)],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+
+        janelaPesquisarPor = sg.Window("Projeto de ATP", pesquisarPor, location=(300,150), font=('Arial', 24))
         while True:
             event, values = janelaPesquisarPor.read()
         
@@ -287,7 +369,37 @@ while True:
                 janelaPesquisarPor.close()
 
     elif event == "OK5":
-        pass
+        #Menu estatístico
+
+        menuEstatistico = [
+        [sg.Text('Dados Estatísticos:')],
+        [sg.Combo(["Animais","Desportos","Destinos Favoritos","Figura Pública","Profissão","Religião"], key='-MENUESTATISTICO-')],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+        janelaMenuEstatistico = sg.Window("Projeto de ATP", menuEstatistico, location=(300,150), font=('Arial', 24))
+        while True:
+            event, values = janelaMenuEstatistico.read()
+            if event == "Procurar":
+                if values['-MENUESTATISTICO-'] == "Animais":
+                    plotdistrib(top10(distribuição_animais(populacao)))
+                elif values['-MENUESTATISTICO-'] == "Desportos":
+                    plotdistrib(top10(distribuição_desporto(populacao)))
+                elif values['-MENUESTATISTICO-'] == "Destinos Favoritos":
+                    plotdistrib(top10(distribuição_destinosFavoritos(populacao)))
+                elif values['-MENUESTATISTICO-'] == "Figura Pública":
+                    plotdistrib(top10(distribuição_figuraPublica(populacao)))
+                elif values['-MENUESTATISTICO-'] == "Profissão":
+                    plotdistrib(top10(distribuição_profissao(populacao)))
+                elif values['-MENUESTATISTICO-'] == "Religião":
+                    plotdistrib(top10(distribuição_religiao(populacao)))
+
+            elif event == sg.WIN_CLOSED or event == 'Sair':
+                break
+            elif event == "Voltar":
+                janelaMenuEstatistico.close()
+
+
+
 
     elif event == sg.WIN_CLOSED or event == 'Sair':
         break
