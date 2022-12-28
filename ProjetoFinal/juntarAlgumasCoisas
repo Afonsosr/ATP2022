@@ -5,29 +5,30 @@ import matplotlib.pyplot as plt
 with open("dataset.json", encoding='utf-8') as dataset:
     populacao = json.load(dataset)
 
+#listas
 populacao = populacao["pessoas"]
-#aux = []
-#for pessoa in populacao["pessoas"]:
-#    aux.append(pessoa)
-#populacao = aux
+
 nomes = []
 for pessoa in populacao:
     nomes.append(pessoa["nome"])
 nomes = sorted(nomes)
 
+DatasetsExtra = ["Dataset extra 1","Dataset extra 2","Dataset extra 3"]
 
+
+#tema
 sg.theme("DarkBrown3")
 
 #menu inicial
 menuInicial = [ 
     [sg.Text("Estudo da População", font=('Arial', 36))],
     [sg.Text("MENU", font=('Arial', 36))],
-    [sg.Text("Inserir Utilizador:", size=(15,1)),sg.Button("OK1")],
-    [sg.Text("Procurar Utilizador:", size=(15,1)), sg.Button("OK2")],
-    [sg.Text("Listar Indivíduos:", size=(15,1)), sg.Button("OK3")],
-    [sg.Text("Pesquisa Por:", size=(15,1)), sg.Button("OK4")],
-    [sg.Text("Menu Estatístico:", size=(15,1)), sg.Button("OK5")],
-    [sg.Text("Adicionar Nova Base de Dados:", size=(15,1)), sg.Button("OK6")],
+    [sg.Text("Inserir Utilizador:", size=(20,1)),sg.Button("OK1")],
+    [sg.Text("Procurar Utilizador:", size=(20,1)), sg.Button("OK2")],
+    [sg.Text("Listar Indivíduos:", size=(20,1)), sg.Button("OK3")],
+    [sg.Text("Pesquisa Por:", size=(20,1)), sg.Button("OK4")],
+    [sg.Text("Menu Estatístico:", size=(20,1)), sg.Button("OK5")],
+    [sg.Text("Adicionar Novos Datasets:", size=(20,1)), sg.Button("OK6")],
     [sg.Button("Sair")]
 ]
 janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150), font=('Arial', 24))
@@ -231,7 +232,9 @@ def janelaUtilizador(pessoa):
 
 
 while True:
-      
+    
+    #print(len(nomes))
+    
     event,values = janelaMenuInicial.read()
     if event == "OK1":
         while True:
@@ -330,10 +333,11 @@ while True:
                 break
 
     elif event == "OK3":
-
+        frase = f"Número de indivíduos em análise: " + str(len(nomes))
         listarIndividuos = [
-        [sg.Text("Lista de indivíduos presentes na BD:", size=(13,1)),
+        [sg.Text("Lista de indivíduos presentes na BD:", size=(30,1)),
         sg.Listbox(nomes, size=(20,12),key ='-INDIVIDUO-', select_mode = sg.LISTBOX_SELECT_MODE_SINGLE)],
+        [sg.Text(frase)],
         [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
         
@@ -398,8 +402,50 @@ while True:
             elif event == "Voltar":
                 janelaMenuEstatistico.close()
 
+    elif event == "OK6":
+        adicionarDatasets = [
+        [sg.Text('Adicionar Datasets:')],
+        [sg.Combo(DatasetsExtra, key='-ADICIONARDATASETS-')],
+        [sg.Button("Adicionar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+        janelaAdicionarDatasets = sg.Window("Projeto de ATP",adicionarDatasets, location=(300,150), font=('Arial', 24))
+        while True:
+            event, values = janelaAdicionarDatasets.read()
+            if event == "Adicionar":
+                if values['-ADICIONARDATASETS-'] == "Dataset extra 1":
+                    with open("dataset-extra1.json", encoding='utf-8') as dataset:
+                        datasetExtra1 = json.load(dataset)                    
+                    datasetExtra1 = datasetExtra1["pessoas"]
+                    populacao = populacao + datasetExtra1
+                    for pessoa in datasetExtra1:
+                        nomes.append(pessoa["nome"])
+                    nomes = sorted(nomes)
+                    DatasetsExtra.remove("Dataset extra 1")
 
+                elif values['-ADICIONARDATASETS-'] == "Dataset extra 2":
+                    with open("dataset-extra2.json", encoding='utf-8') as dataset:
+                        datasetExtra2 = json.load(dataset)                    
+                    datasetExtra2 = datasetExtra2["pessoas"]
+                    populacao = populacao + datasetExtra2
+                    for pessoa in datasetExtra2:
+                        nomes.append(pessoa["nome"])
+                    nomes = sorted(nomes)
+                    DatasetsExtra.remove("Dataset extra 2")   
 
+                elif values['-ADICIONARDATASETS-'] == "Dataset extra 3":
+                    with open("dataset-extra3.json", encoding='utf-8') as dataset:
+                        datasetExtra3 = json.load(dataset)                    
+                    datasetExtra3 = datasetExtra3["pessoas"]
+                    populacao = populacao + datasetExtra3
+                    for pessoa in datasetExtra3:
+                        nomes.append(pessoa["nome"])
+                    nomes = sorted(nomes)
+                    DatasetsExtra.remove("Dataset extra 3")
+            
+            elif event == sg.WIN_CLOSED or event == 'Sair':
+                break
+            elif event == "Voltar":
+                janelaAdicionarDatasets.close()       
 
     elif event == sg.WIN_CLOSED or event == 'Sair':
         break
