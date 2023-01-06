@@ -33,15 +33,20 @@ for pessoa in populacao:
             else:
                 distribDesporto[desporto].append(pessoa["nome"])
 
-
 distribPartido = {}
 for pessoa in populacao:
-    for partido in pessoa['partido_politico']:
-        if partido not in distribPartido:
-            distribPartido[partido] = [pessoa["nome"]]
+        if pessoa['partido_politico']['party_name'] not in distribPartido:
+            distribPartido[pessoa['partido_politico']['party_name']] = [pessoa["nome"]]
         else:
-            distribPartido[partido].append(pessoa["nome"])
- 
+            distribPartido[pessoa['partido_politico']['party_name']].append(pessoa["nome"])
+
+distribDistrito = {}
+for pessoa in populacao:
+        if pessoa['morada']['distrito'] not in distribDistrito:
+            distribDistrito[pessoa['morada']['distrito']] = [pessoa["nome"]]
+        else:
+            distribDistrito[pessoa['morada']['distrito']].append(pessoa["nome"])
+
 #tema
 sg.theme("DarkBrown3")
 
@@ -413,8 +418,7 @@ while True:
                     novoUtilizador['gosta_dancar'] = True
                 else:
                     novoUtilizador['gosta_dancar'] = False
-                #CONTINUAR A FAZER ESTA COISA
-                #O ERRO A SEGUIR É SO PRA SABER QUE ESTOU AQUI
+    
 
                 if novoUtilizador['nome'] == "" or novoUtilizador['idade'] == "" or novoUtilizador['cidade'] == "" or novoUtilizador['distrito'] == "" or novoUtilizador['BI'] == "" or novoUtilizador['profissao'] == "":
                             #operacao inserir utilizador invalida
@@ -541,47 +545,83 @@ while True:
         [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
         janelaPesquisarPorDesporto = sg.Window("Projeto de ATP", pesquisarPorDesporto, location=(300,150), font=('Arial', 24))
+
+        pesquisarPorPartido = [
+        [sg.Text('Partidos:')],
+        [sg.Combo(sorted(distribPartido.keys()), size=(20,6),key ='-PESQUISAPORPARTIDO-')],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+        janelaPesquisarPorPartido = sg.Window("Projeto de ATP", pesquisarPorPartido, location=(300,150), font=('Arial', 24))
+
+        pesquisarPorDistrito = [
+        [sg.Text('Distritos:')],
+        [sg.Combo(sorted(distribDistrito.keys()), size=(20,6),key ='-PESQUISAPORDISTRITO-')],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+        janelaPesquisarPorDistrito = sg.Window("Projeto de ATP", pesquisarPorDistrito, location=(300,150), font=('Arial', 24))
+
+
 #janela com lista de pessoas        
         def janelaComListaDePessoas(a):
             ListaPeople = [
                 [sg.Listbox(sorted(a),size=(20,12))],
-                [sg.Button("Voltar"),sg.Button("Sair")]
             ]
             janelaListaPeople = sg.Window("Projeto de ATP", ListaPeople, location=(300,150), font=('Arial', 24))
-            event,_ = janelaListaPeople.read()
-            if event == sg.WIN_CLOSED or event == 'Sair':
-                janelaListaPeople.close()
-            elif event == "Voltar":
-                janelaListaPeople.close()
-            return()
+            janelaListaPeople.read()
+
 
         while True:
             event, values = janelaPesquisarPor.read()
             
             if event == "Procurar":
                 if values['-PESQUISAPOR-'] == "Religião":
-                    event,values = janelaPesquisarPorReligiao.read()
-                    if event == "Procurar":
-                        chaves = distribReligião.keys()
-                        for chave in chaves:
-                            if chave == values['-PESQUISAPORRELIGIAO-']:
-                                janelaComListaDePessoas(distribReligião[chave])
-                    elif event == sg.WIN_CLOSED or event == 'Sair':
-                        break
-                    elif event == "Voltar":
-                        janelaPesquisarPorReligiao.close()
- 
+                    while True:
+                        event,values = janelaPesquisarPorReligiao.read()
+                        if event == "Procurar":
+                            chaves = distribReligião.keys()
+                            for chave in chaves:
+                                if chave == values['-PESQUISAPORRELIGIAO-']:
+                                    janelaComListaDePessoas(distribReligião[chave])
+                        elif event == sg.WIN_CLOSED or event == 'Sair':
+                            break
+                        elif event == "Voltar":
+                            janelaPesquisarPorReligiao.close()
+    
                 elif values['-PESQUISAPOR-'] == "Desporto":
-                    event,values = janelaPesquisarPorDesporto.read()
-                    if event == "Procurar":
-                        for chave in distribDesporto:
-                            if chave == values['-PESQUISAPORDESPORTO-']:
-                                janelaComListaDePessoas(distribDesporto[chave])
-                    elif event == sg.WIN_CLOSED or event == 'Sair':
-                        break
-                    elif event == "Voltar":
-                        janelaPesquisarPorDesporto.close()
+                     while True:
+                        event,values = janelaPesquisarPorDesporto.read()
+                        if event == "Procurar":
+                            for chave in distribDesporto:
+                                if chave == values['-PESQUISAPORDESPORTO-']:
+                                    janelaComListaDePessoas(distribDesporto[chave])
+                        elif event == sg.WIN_CLOSED or event == 'Sair':
+                            break
+                        elif event == "Voltar":
+                            janelaPesquisarPorDesporto.close()
 
+                elif values['-PESQUISAPOR-'] == "Partido Político":
+                     while True:
+                        event,values = janelaPesquisarPorPartido.read()
+                        if event == "Procurar":
+                            for chave in distribPartido:
+                                if chave == values['-PESQUISAPORPARTIDO-']:
+                                    janelaComListaDePessoas(distribPartido[chave])
+                        elif event == sg.WIN_CLOSED or event == 'Sair':
+                            break
+                        elif event == "Voltar":
+                            janelaPesquisarPorPartido.close()
+
+                elif values['-PESQUISAPOR-'] == "Distrito":
+                     while True:
+                        event,values = janelaPesquisarPorDistrito.read()
+                        if event == "Procurar":
+                            for chave in distribDistrito:
+                                if chave == values['-PESQUISAPORDISTRITO-']:
+                                    janelaComListaDePessoas(distribDistrito[chave])
+                        elif event == sg.WIN_CLOSED or event == 'Sair':
+                            break
+                        elif event == "Voltar":
+                            janelaPesquisarPorDistrito.close()
 
                         
             elif event == sg.WIN_CLOSED or event == 'Sair':
@@ -667,4 +707,3 @@ while True:
     elif event == sg.WIN_CLOSED or event == 'Sair':
         break
         
-
