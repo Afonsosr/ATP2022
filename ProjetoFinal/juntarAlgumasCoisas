@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import json
 import matplotlib.pyplot as plt
+import pandas as pd
 
 with open("dataset.json", encoding='utf-8') as dataset:
     populacao = json.load(dataset)
@@ -33,6 +34,15 @@ for pessoa in populacao:
             else:
                 distribDesporto[desporto].append(pessoa["nome"])
 
+distribAnimais= {}
+for pessoa in populacao:
+    if 'animais' in pessoa.keys():
+        for animal in pessoa["animais"]:
+            if animal not in distribAnimais:
+                distribAnimais[animal] = [pessoa["nome"]]
+            else:
+                distribAnimais[animal].append(pessoa["nome"])
+
 distribPartido = {}
 for pessoa in populacao:
         if pessoa['partido_politico']['party_name'] not in distribPartido:
@@ -50,71 +60,7 @@ for pessoa in populacao:
 #tema
 sg.theme("DarkBrown3")
 
-#menu inicial
-menuInicial = [ 
-    [sg.Text("Estudo da População", font=('Arial', 36))],
-    [sg.Text("MENU", font=('Arial', 36))],
-    [sg.Text("Inserir Utilizador:", size=(20,1)),sg.Button("OK1")],
-    [sg.Text("Procurar Utilizador:", size=(20,1)), sg.Button("OK2")],
-    [sg.Text("Listar Indivíduos:", size=(20,1)), sg.Button("OK3")],
-    [sg.Text("Pesquisa Por:", size=(20,1)), sg.Button("OK4")],
-    [sg.Text("Menu Estatístico:", size=(20,1)), sg.Button("OK5")],
-    [sg.Text("Adicionar Novos Datasets:", size=(20,1)), sg.Button("OK6")],
-    [sg.Button("Sair")]
-]
-janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150), font=('Arial', 24))
 
-# inserir utilizador
-inserirUtilizadorEsquerda = [
-    [sg.Text("Introdução de Utilizador", font=('Arial', 36))],
-    [sg.Text("Nome:",font=(20), size=(15,1)),sg.InputText(key="-NOME-",size=(20),do_not_clear=False)],
-    [sg.Text("Idade:",font=(20), size=(15,1)),sg.InputText(key='-IDADE-',size=(20),do_not_clear=False)],
-    [sg.Text("Género:",font=(20), size=(8,1)), sg.Radio("Masculino","sexo",default=True),
-            sg.Radio("Feminino","sexo"),
-            sg.Radio("Outro","sexo")],
-    [sg.Text("Morada", font=('Arial', 15))],
-    [sg.Text("Localidade:",font=(20), size=(15,1)),sg.InputText(key='-LOCALIDADE-',size=(20),do_not_clear=False)],
-    [sg.Text("Distrito:",font=(20), size=(15,1)),sg.InputText(key='-DISTRITO-',size=(20),do_not_clear=False)],
-    [sg.Text("Nº CC/BI:",font=(20), size=(15,1)),sg.InputText(key='-CCBI-',size=(20),do_not_clear=False)],
-    [sg.Text("Descrição:",font=(20), size=(15,1)),sg.InputText(key='-DESCRICAO-',size=(20),do_not_clear=False)],
-    [sg.Text("Profissão:",font=(20), size=(15,1)),sg.InputText(key='-PROFISSAO-',size=(20),do_not_clear=False)],
-    [sg.Text("Partido Político", font=('Arial', 15))],  
-    [sg.Text("Nome por Extenso:",font=(20), size=(15,1)),sg.InputText(key='-EXTENSO-',size=(20),do_not_clear=False)],
-    [sg.Text("Sigla:",font=(20), size=(15,1)),sg.InputText(key='-SIGLA-',size=(20),do_not_clear=False)],
-    [sg.Text("Religião:",font=(20), size=(15,1)),sg.InputText(key='-RELIGIAO-',size=(20),do_not_clear=False)],
-    [sg.Text("Desportos Praticados:",font=(20), size=(15,1)),sg.InputText(key='-DESPORTOS-',size=(20),do_not_clear=False)],
-]
-inserirUtilizadorDireita = [
-    [sg.Text("Celebridades Favoritas:",font=(20), size=(15,1)),sg.InputText(key='-CELEBRIDADE-',size=(20),do_not_clear=False)],
-    [sg.Text("Marca Carro:",font=(20), size=(15,1)),sg.InputText(key='-CARRO-',size=(20),do_not_clear=False)],
-    [sg.Text("Destino Favorito:",font=(20), size=(15,1)),sg.InputText(key='-DESTINOS-',size=(20),do_not_clear=False)],
-    [sg.Text("Animais Favoritos:",font=(20), size=(15,1)),sg.InputText(key='-ANIMAIS-',size=(20),do_not_clear=False)],
-    [sg.Text("Atributos", font=('Arial', 15))],
-        [sg.Text("Fuma?:",font=(20), size=(15,1)), sg.Radio("Sim","fuma",default=True),
-            sg.Radio("Não","fuma")],
-        [sg.Text("Gosta de cinema?:",font=(20), size=(15,1)), sg.Radio("Sim","cinema",default=True),
-            sg.Radio("Não","cinema")],
-        [sg.Text("Gosta de viajar?:",font=(20), size=(15,1)), sg.Radio("Sim","viagem",default=True),
-            sg.Radio("Não","viagem")],
-        [sg.Text("Acorda cedo?:",font=(20), size=(15,1)), sg.Radio("Sim","acordarcedo",default=True),
-            sg.Radio("Não","acordarcedo")],
-        [sg.Text("Gosta de ler?:",font=(20), size=(15,1)), sg.Radio("Sim","ler",default=True),
-            sg.Radio("Não","ler")],
-        [sg.Text("Gosta de música?:",font=(20), size=(15,1)), sg.Radio("Sim","musica",default=True),
-            sg.Radio("Não","musica")],
-        [sg.Text("Gosta de comer?:",font=(20), size=(15,1)), sg.Radio("Sim","comer",default=True),
-            sg.Radio("Não","comer")],
-        [sg.Text("Gosta de dançar?:",font=(20), size=(15,1)), sg.Radio("Sim","dancar",default=True),
-            sg.Radio("Não","dancar")],
-        [sg.Text("Gosta de animais de estimação?:",font=(20), size=(15,1)), sg.Radio("Sim","pets",default=True),
-            sg.Radio("Não","pets")],
-    [sg.Text("Comida Favorita:",font=(20), size=(15,1)),sg.InputText(key='-COMIDA-',size=(20),do_not_clear=False)]
-]
-inserirUtilizador = [
-    [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
-    [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
-]
-janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(100,0), font=('Arial', 24))
 
 #operacao inserir utilizador invalida
 operacaoInvalida = [ 
@@ -258,9 +204,10 @@ while True:
     [sg.Text("Pesquisa Por:", size=(20,1)), sg.Button("OK4")],
     [sg.Text("Menu Estatístico:", size=(20,1)), sg.Button("OK5")],
     [sg.Text("Adicionar Novos Datasets:", size=(20,1)), sg.Button("OK6")],
+    [sg.Text("Guardar Dataset Em Excel:", size=(20,1)), sg.Button("OK7")],
     [sg.Button("Sair")]
     ]
-    janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(300,150), font=('Arial', 24))
+    janelaMenuInicial = sg.Window("Projeto de ATP", menuInicial, location=(500,50), font=('Arial', 24))
 
     
     event,values = janelaMenuInicial.read()
@@ -280,19 +227,23 @@ while True:
             [sg.Text("Nº CC/BI:",font=(20), size=(15,1)),sg.InputText(key='-CCBI-',size=(20),do_not_clear=False)],
             [sg.Text("Descrição:",font=(20), size=(15,1)),sg.InputText(key='-DESCRICAO-',size=(20),do_not_clear=False)],
             [sg.Text("Profissão:",font=(20), size=(15,1)),sg.InputText(key='-PROFISSAO-',size=(20),do_not_clear=False)],
+
+        ]
+        inserirUtilizadorCentro= [
             [sg.Text("Partido Político", font=('Arial', 15))],  
             [sg.Text("Nome por Extenso:",font=(20), size=(15,1)),sg.InputText(key='-EXTENSO-',size=(20),do_not_clear=False)],
             [sg.Text("Sigla:",font=(20), size=(15,1)),sg.InputText(key='-SIGLA-',size=(20),do_not_clear=False)],
             [sg.Text("Religião:",font=(20), size=(15,1)),sg.InputText(key='-RELIGIAO-',size=(20),do_not_clear=False)],
             [sg.Text("Desportos Praticados:",font=(20), size=(15,1)),sg.InputText(key='-DESPORTOS-',size=(20),do_not_clear=False)],
-        ]
-        inserirUtilizadorDireita = [
             [sg.Text("Celebridades Favoritas:",font=(20), size=(15,1)),sg.InputText(key='-CELEBRIDADE-',size=(20),do_not_clear=False)],
             [sg.Text("Marca Carro:",font=(20), size=(15,1)),sg.InputText(key='-CARRO-',size=(20),do_not_clear=False)],
             [sg.Text("Destino Favorito:",font=(20), size=(15,1)),sg.InputText(key='-DESTINOS-',size=(20),do_not_clear=False)],
             [sg.Text("Animais Favoritos:",font=(20), size=(15,1)),sg.InputText(key='-ANIMAIS-',size=(20),do_not_clear=False)],
+            [sg.Text("Comida Favorita:",font=(20), size=(15,1)),sg.InputText(key='-COMIDA-',size=(20),do_not_clear=False)]
+        ]
+        inserirUtilizadorDireita = [
             [sg.Text("Atributos", font=('Arial', 15))],
-                [sg.Text("Fuma?:",font=(20), size=(15,1)), sg.Radio("Sim","fuma",key="-FUMA-",default=True),
+            [sg.Text("Fuma?:",font=(20), size=(15,1)), sg.Radio("Sim","fuma",key="-FUMA-",default=True),
                     sg.Radio("Não","fuma")],
                 [sg.Text("Gosta de cinema?:",font=(20), size=(15,1)), sg.Radio("Sim","cinema",key="-CINEMA-",default=True),
                     sg.Radio("Não","cinema")],
@@ -309,14 +260,13 @@ while True:
                 [sg.Text("Gosta de dançar?:",font=(20), size=(15,1)), sg.Radio("Sim","dancar",key="-GOSTDANC-",default=True),
                     sg.Radio("Não","dancar")],
                 [sg.Text("Gosta de animais de estimação?:",font=(20), size=(15,1)), sg.Radio("Sim","pets",key="-PETS-",default=True),
-                    sg.Radio("Não","pets")],
-            [sg.Text("Comida Favorita:",font=(20), size=(15,1)),sg.InputText(key='-COMIDA-',size=(20),do_not_clear=False)]
+                    sg.Radio("Não","pets")]
         ]
         inserirUtilizador = [
-            [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
+            [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorCentro, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
             [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
-        janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(100,0), font=('Arial', 24))
+        janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(0,0), font=('Arial', 24))
 
 
         while True:
@@ -397,9 +347,15 @@ while True:
                             #operacao inserir utilizador invalida
                     operacaoInvalida = [ 
                         [sg.Text("Operação inválida", font=('Arial', 36))],
-                        [sg.Text("Os campos NOME,IDADE,LOCALIDADE,DISTRITO,CCBI e PROFISSAO tem que estar preenchidos.", font=('Arial', 20))],
-                        [sg.Button("Voltar")],
-                        [sg.Button("Sair")]
+                        [sg.Text("""Os campos: 
+                -NOME
+                -IDADE,
+                -LOCALIDADE,
+                -DISTRITO,
+                -CC/BI,
+                -PROFISSÃO
+tem que estar preenchidos.""", font=('Arial', 20))],
+                        [sg.Button("Voltar"), sg.Button("Sair")],
                     ]
                     janelaOperacaoInvalida = sg.Window("Projeto de ATP", operacaoInvalida, location=(150,200), font=('Arial', 24))
                     
@@ -415,7 +371,7 @@ while True:
                     'sexo': novoUtilizador['sexo'], 'morada': {'cidade': novoUtilizador['cidade'], 'distrito': novoUtilizador['distrito']}, 
                     'BI': novoUtilizador['BI'], 'descrição':  novoUtilizador['descrição'], 
                     'profissao': novoUtilizador['profissao'], 
-                    'partido_politico': {'party_abbr':  novoUtilizador['party_name'], 'party_name': novoUtilizador['party_abbr']}, 
+                    'partido_politico': {'party_abbr':  novoUtilizador['party_abbr'], 'party_name': novoUtilizador['party_name']}, 
                     'religiao': novoUtilizador['religiao'], 
                     'desportos':  novoUtilizador['desportos'].split(",") ,
                     'animais':    novoUtilizador['animais'].split(","), 
@@ -425,8 +381,8 @@ while True:
                     'gosta_musica': novoUtilizador['gosta_musica'], 'gosta_comer': novoUtilizador['gosta_comer'], 'gosta_animais_estimacao': novoUtilizador[ 'gosta_animais_estimacao'], 'gosta_dancar': novoUtilizador['gosta_dancar'],
                     'comida_favorita': novoUtilizador['comida_favorita'] }}
                     populacao.append(registo)
-                    print(registo)
-
+                    nomes.append(pessoa["nome"])
+                    nomes = sorted(nomes)
                     event,_ = janelaOperacaoSucesso.read()                   
                     if event == "Voltar":
                         janelaOperacaoSucesso.close() 
@@ -477,11 +433,12 @@ while True:
                                 n += 1
                                 print(pessoa["nome"])
                         if n == 0:
-                            event,values = janelaDadosNaoEncontrados.read()
-                            if event == "Voltar":
-                                janelaDadosNaoEncontrados.close()
-                            elif event == sg.WIN_CLOSED or event == 'Sair':
-                                break
+                            while True:
+                                event,values = janelaDadosNaoEncontrados.read()
+                                if event == "Voltar":
+                                    janelaDadosNaoEncontrados.close()
+                                elif event == sg.WIN_CLOSED or event == 'Sair':
+                                    break
                     elif event == "Voltar":
                         janelaProcurarNome.close()
                     elif event == sg.WIN_CLOSED or event == 'Sair':
@@ -501,11 +458,12 @@ while True:
                                     n += 1
                                     print(pessoa["nome"] +" ::: "+pessoa["CC"])
                         if n == 0:
-                            event,values = janelaDadosNaoEncontrados.read()
-                            if event == "Voltar":
-                                janelaDadosNaoEncontrados.close()
-                            elif event == sg.WIN_CLOSED or event == 'Sair':
-                                break
+                            while True:
+                                event,values = janelaDadosNaoEncontrados.read()
+                                if event == "Voltar":
+                                    janelaDadosNaoEncontrados.close()
+                                elif event == sg.WIN_CLOSED or event == 'Sair':
+                                    break
                     elif event == "Voltar":
                         janelaProcurarCCBI.close()
                     elif event == sg.WIN_CLOSED or event == 'Sair':
@@ -541,7 +499,7 @@ while True:
 #janelas desta opcao do menu
         pesquisarPor = [
         [sg.Text('Pesquisar por:')],
-        [sg.Combo(["Religião","Desporto","Partido Político","Distrito"], size=(20,6),key ='-PESQUISAPOR-')],
+        [sg.Combo(["Animal","Desporto","Distrito","Partido Político","Religião"], size=(20,6),key ='-PESQUISAPOR-')],
         [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
 
@@ -553,7 +511,14 @@ while True:
         [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
         janelaPesquisarPorReligiao = sg.Window("Projeto de ATP", pesquisarPorReligiao, location=(300,150), font=('Arial', 24))
-        
+
+        pesquisarPorAnimal = [
+        [sg.Text('Animais:')],
+        [sg.Combo(sorted(distribAnimais.keys()), size=(20,6),key ='-PESQUISAPORANIMAL-')],
+        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        ]
+        janelaPesquisarPorAnimal = sg.Window("Projeto de ATP", pesquisarPorAnimal, location=(300,150), font=('Arial', 24))
+
         pesquisarPorDesporto = [
         [sg.Text('Desportos:')],
         [sg.Combo(sorted(distribDesporto.keys()), size=(20,6),key ='-PESQUISAPORDESPORTO-')],
@@ -638,6 +603,18 @@ while True:
                         elif event == "Voltar":
                             janelaPesquisarPorDistrito.close()
 
+                elif values['-PESQUISAPOR-'] == "Animal":
+                     while True:
+                        event,values = janelaPesquisarPorAnimal.read()
+                        if event == "Procurar":
+                            for chave in distribAnimais:
+                                if chave == values['-PESQUISAPORANIMAL-']:
+                                    janelaComListaDePessoas(distribAnimais[chave])
+                        elif event == sg.WIN_CLOSED or event == 'Sair':
+                            break
+                        elif event == "Voltar":
+                            janelaPesquisarPorAnimal.close()                            
+
                         
             elif event == sg.WIN_CLOSED or event == 'Sair':
                 break
@@ -719,7 +696,14 @@ while True:
             elif event == "Voltar":
                 janelaAdicionarDatasets.close()       
 
+    elif event == "OK7":
+        df = pd.DataFrame(populacao)
+        df.to_excel("datasetProjeto.xlsx")
+        confirmacao = [
+            [sg.Text("Ficheiro Excel autalizado com sucesso.", font=('Arial', 36))]
+        ]
+        janelaConfirmacao = sg.Window("Projeto de ATP",confirmacao, location=(300,150), font=('Arial', 24))
+        janelaConfirmacao.read()
     elif event == sg.WIN_CLOSED or event == 'Sair':
         break
         
-
