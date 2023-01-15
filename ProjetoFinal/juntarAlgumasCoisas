@@ -62,16 +62,7 @@ sg.theme("DarkBrown3")
 
 
 
-#operacao inserir utilizador invalida
-operacaoInvalida = [ 
-    [sg.Text("Operação inválida", font=('Arial', 36))],
-    [sg.Text("Os campos NOME,IDADE,LOCALIDADE,DISTRITO,CCBI e PROFISSAO tem que estar preenchidos.", font=('Arial', 20))],
-    [sg.Button("Voltar")],
-    [sg.Button("Sair")]
-]
 
-
-janelaOperacaoInvalida = sg.Window("Projeto de ATP", operacaoInvalida, location=(150,200), font=('Arial', 24))
 
 #insercao feita com sucesso
 operacaoSucesso = [ 
@@ -170,26 +161,81 @@ def plotdistrib(distrib):
 
 # funcao para criar o cartao de informacoes da pessoa
 
-def janelaUtilizador(pessoa):
-    utilizador = [
-        [sg.Text('Nome:',pessoa["nome"])],
-        [sg.Text('Idade:',pessoa['idade'])],
-        [sg.Text('Sexo:',pessoa['sexo'])],
-        [sg.Text('Morada:',pessoa['morada']['cidade'] +", " +pessoa['morada']['distrito'])],  #["cidade"]],", ",pessoa["morada"["distrito"]])
-        [sg.Text('BI/CC:',pessoa['CC'])],
-        [sg.Text('Descrição:',['descrição'])],
-        [sg.Text('Profissão:',pessoa['profissao'])],
-        [sg.Text('Partido:',pessoa['partido_politico']['party_abbr'] +" - " +pessoa['partido_politico']['party_name'])],  #["party_abbr"]]," - ",pessoa['partido_politico'["party_name"]])
-        [sg.Text('Religião:',pessoa['religiao'])],
-        [sg.Text('Desportos:',pessoa['desportos'])],
-        [sg.Text('Animais:',pessoa['animais'])],
-        [sg.Text('Figuras Públicas:',pessoa['figura_publica_pt'])],
-        [sg.Text('Marca do Carro:',pessoa['marca_carro'])],
-        [sg.Text('Destinos Favoritos:',pessoa['destinos_favoritos'])],
-        [sg.Text('Comida Favorita:', pessoa['atributos']["comida_favorita"])],  
+def criarPerfil(i):
+    for pessoa in populacao:
+        if i in pessoa["nome"]: 
+            if pessoa["sexo"] == "masculino":
+                imagem = "homem1.png"
+            elif pessoa["sexo"] == "feminino":
+                imagem = "mulher1.png"
+            else:
+                imagem = "outro1.png"
+            if 'religiao' not in pessoa.keys():
+                pessoa["religiao"] = " "
+            if "profissao" not in pessoa.keys():
+                pessoa["profissao"] = " "
+            if "CC" not in pessoa.keys():
+                pessoa["CC"] = pessoa["BI"]           
+            if "idade" not in pessoa.keys():
+                pessoa["idade"] = " "
+            if "desportos" not in pessoa.keys():
+                pessoa["desportos"] = " "
+            if "animais" not in pessoa.keys():
+                pessoa["animais"] = " "
+            if "figura_publica_pt" not in pessoa.keys():
+                pessoa['figura_publica_pt'] = " "
+            if "marca_carro" not in pessoa.keys():
+                pessoa["marca_carro"] = " "
+            if "destinos_favoritos" not in pessoa.keys():
+                pessoa["destinos_favoritos"] = " "
+            if "descrição" not in pessoa.keys():
+                pessoa["descrição"] = " "
+
+
+            perfilEsquerda = [
+            [sg.Text("Perfil Individual",relief = "raised", font=('Arial', 36))],
+            [sg.Text("Nome: " + pessoa["nome"],font=(20), size=(30,1))],
+            [sg.Text("Idade: " + str(pessoa["idade"]),font=(20), size=(15,1))],
+            [sg.Text("Morada", font=('Arial', 15))],
+            [sg.Text("Localidade: "+pessoa['morada']['cidade'],font=(20), size=(30,1))],
+            [sg.Text("Distrito: "+pessoa['morada']['distrito'],font=(20), size=(30,1))],
+            [sg.Text("Nº CC/BI: " + pessoa["CC"] ,font=(20), size=(30,1))],
+            [sg.Text("Descrição: ",font=(20)),sg.Multiline(pessoa['descrição'],s=(30,2),font=(20))],
+            [sg.Text("Profissão: "+pessoa['profissao'],font=(20), size=(60,1))],
+            [sg.Text("Partido Político", font=('Arial', 15))],  
+            [sg.Text("Nome por Extenso: "+pessoa['partido_politico']['party_name'] ,font=(20), size=(50,1))],
+            [sg.Text("Sigla: "+pessoa['partido_politico']['party_abbr'],font=(20), size=(15,1))],
+            [sg.Text("Religião: " + pessoa['religiao'],font=(20), size=(30,1))],
+            [sg.Text("Desportos Praticados: ",font=(20)),sg.Multiline(pessoa['desportos'],s=(30,2),font=(20))],
+            [sg.Text("Celebridades Favoritas: ",font=(20)),sg.Multiline(pessoa['figura_publica_pt'],s=(30,2),font=(20))],
+            [sg.Text("Destinos Favoritos: ",font=(20)),sg.Multiline(pessoa['destinos_favoritos'],s=(30,2),font=(20))],
+            [sg.Text("Animais Favoritos: ",font=(20)),sg.Multiline(pessoa['animais'],s=(30,2),font=(20))],
+            ]
+
+            perfilDireita = [
+                [sg.Image(imagem)],
+                [sg.Text("Marca Carro: "+pessoa['marca_carro'],font=(20), size=(30,1))],
+                [sg.Text("Comida Favorita: " + pessoa['atributos']["comida_favorita"],font=(20), size=(40,1))],
+                [sg.Text("Fuma?: " + str(pessoa["atributos"]["fumador"]),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de cinema?: " + str(pessoa["atributos"]['gosta_cinema']),font=(20), size=(30,1))],
+                [sg.Text("Gosta de viajar?: " + str(pessoa["atributos"]['gosta_viajar']),font=(20), size=(30,1))],
+                [sg.Text("Acorda cedo?: " + str(pessoa["atributos"]['acorda_cedo']),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de ler?: " + str(pessoa["atributos"][ 'gosta_ler']),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de música?: " + str(pessoa["atributos"]['gosta_musica']),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de comer?: " + str(pessoa["atributos"]['gosta_comer']),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de dançar?: " + str(pessoa["atributos"]['gosta_dancar']),font=(20), size=(20,1))], 
+                [sg.Text("Gosta de animais de estimação?: " + str(pessoa["atributos"][ 'gosta_animais_estimacao']),font=(20), size=(40,1))]
+            ]
+
+    perfilUtilizador = [
+        [sg.Col(perfilEsquerda, p=0), sg.Col(perfilDireita, p=0)],
+        [sg.Button("Voltar")]
     ]
-    janelaUtilizador = sg.Window("Projeto de ATP", utilizador, location=(300,150), font=('Arial', 24))
-    janelaUtilizador.read()
+    janelaPerfil = sg.Window("Projeto de ATP", perfilUtilizador, location=(200,-5), font=('Arial', 24))
+  
+    event,_ =janelaPerfil.read()
+    if event == "Voltar":
+        janelaPerfil.close()
 
 
 while True:
@@ -266,7 +312,7 @@ while True:
             [sg.Col(inserirUtilizadorEsquerda, p=0), sg.Col(inserirUtilizadorCentro, p=0), sg.Col(inserirUtilizadorDireita, p=0)],
             [sg.Button("Submeter"),sg.Button("Voltar"),sg.Button("Sair")]
         ]
-        janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(0,0), font=('Arial', 24))
+        janelaInserirUtilizador = sg.Window("Projeto de ATP", inserirUtilizador, location=(-10,0), font=('Arial', 24))
 
 
         while True:
@@ -431,7 +477,7 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         for pessoa in populacao:
                             if values['-PROCURARNOME-'] in pessoa["nome"]:
                                 n += 1
-                                print(pessoa["nome"])
+                                criarPerfil(pessoa["nome"])
                         if n == 0:
                             while True:
                                 event,values = janelaDadosNaoEncontrados.read()
@@ -452,11 +498,11 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                             if 'BI' in pessoa.keys():
                                 if values['-PROCURARCCBI-'] in pessoa["BI"]:
                                     n += 1
-                                    print(pessoa["nome"] +" ::: "+pessoa["BI"])
+                                    criarPerfil(pessoa["nome"])
                             elif "CC" in pessoa.keys():
                                 if values['-PROCURARCCBI-'] in pessoa["CC"]:
                                     n += 1
-                                    print(pessoa["nome"] +" ::: "+pessoa["CC"])
+                                    criarPerfil(pessoa['nome'])
                         if n == 0:
                             while True:
                                 event,values = janelaDadosNaoEncontrados.read()
@@ -477,20 +523,19 @@ tem que estar preenchidos.""", font=('Arial', 20))],
 
         frase = f"Número de indivíduos em análise: " + str(len(nomes))
         listarIndividuos = [
-        [sg.Text("Lista de indivíduos presentes na BD:", size=(30,1)),
-        sg.Listbox(nomes, size=(20,12),key ='-INDIVIDUO-', select_mode = sg.LISTBOX_SELECT_MODE_SINGLE)],
+        [sg.Text("Lista de indivíduos presentes na BD:", size=(30,1))],
+        [sg.Listbox(nomes, size=(20,12),key ='-INDIVIDUO-', select_mode = sg.LISTBOX_SELECT_MODE_SINGLE)],
         [sg.Text(frase)],
-        [sg.Button("Procurar"),sg.Button("Voltar"),sg.Button("Sair")]
+        [sg.Button("Procurar"),sg.Button("Voltar")]
         ]
         
-        janelaListarIndividuos = sg.Window("Projeto de ATP", listarIndividuos, location=(300,150), font=('Arial', 24))
+        janelaListarIndividuos = sg.Window("Projeto de ATP", listarIndividuos, location=(300,100), font=('Arial', 24))
 
         while True:
             event, values = janelaListarIndividuos.read()
         
-            if event == "Procurar":
-                print("hello")
-            elif event == sg.WIN_CLOSED or event == 'Voltar':
+
+            if event == sg.WIN_CLOSED or event == 'Sair':
                 break
             elif event == "Voltar":
                 janelaListarIndividuos.close()
