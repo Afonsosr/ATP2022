@@ -3,6 +3,7 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 with open("dataset.json", encoding='utf-8') as dataset:
     populacao = json.load(dataset)
 
@@ -58,7 +59,7 @@ for pessoa in populacao:
             distribDistrito[pessoa['morada']['distrito']].append(pessoa["nome"])
 
 #tema
-sg.theme("DarkBrown3")
+sg.theme("LightBlue")
 
 
 
@@ -151,7 +152,7 @@ def top10(distrib):
 
 #Gráficos das distribuições
 def plotdistrib(distrib):
-    plt.plot(distrib.keys(), distrib.values())
+    plt.plot(distrib.keys(), distrib.values(),marker = "o")
     plt.xticks([x for x in range(0, len(distrib.keys()))], distrib.keys(), rotation = 45)
     plt.title("Distribuição dos indivíduos - TOP 10")
     plt.show()
@@ -229,15 +230,14 @@ def criarPerfil(i):
 
     perfilUtilizador = [
         [sg.Col(perfilEsquerda, p=0), sg.Col(perfilDireita, p=0)],
-        [sg.Button("Voltar"),sg.Button("Sair")]
+        [sg.Button("Voltar")]
     ]
     janelaPerfil = sg.Window("Projeto de ATP", perfilUtilizador, location=(200,-5), font=('Arial', 24))
   
     event,_ =janelaPerfil.read()
     if event == "Voltar":
         janelaPerfil.close()
-    if event == "Sair":
-        janelaPerfil.close()
+
 
 
 while True:
@@ -321,7 +321,7 @@ while True:
             event,values = janelaInserirUtilizador.read()      
 
             if event == 'Sair':
-                exit()
+                janelaInserirUtilizador.close()
 
             elif event == sg.WINDOW_CLOSED:
                 break
@@ -415,7 +415,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                     if event == "Voltar":
                         janelaOperacaoInvalida.close() 
                     if event == 'Sair':
-                        exit()     
+                        janelaOperacaoInvalida.close()
+                        janelaInserirUtilizador.close()    
                     elif event == sg.WINDOW_CLOSED:
                         break       
                 else:                 
@@ -438,7 +439,9 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                     event,_ = janelaOperacaoSucesso.read()                   
                     if event == "Voltar":
                         janelaOperacaoSucesso.close()   
-               
+                    elif event == "Sair":
+                        janelaOperacaoSucesso.close()
+                        janelaInserirUtilizador.close()
     elif event == "OK2":
 
         #procurar utilizador
@@ -491,7 +494,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                     elif event == "Voltar":
                         janelaProcurarNome.close()
                     elif event == 'Sair':
-                        exit()     
+                        janelaProcurarNome.close()
+                        janelaProcurarUtilizador.close()   
                     elif event == sg.WINDOW_CLOSED:
                         break           
             elif event == 'CC/BI':  
@@ -518,13 +522,12 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                     elif event == "Voltar":
                         janelaProcurarCCBI.close()
                     elif event == 'Sair':
-                        exit()     
+                        janelaProcurarCCBI.close()
+                        janelaProcurarUtilizador.close()
                     elif event == sg.WINDOW_CLOSED:
                         break 
-            elif event == "Voltar":
+            elif event == "Voltar"or event == "Sair":
                 janelaProcurarUtilizador.close()
-            elif event == 'Sair':
-                exit()
             elif event == sg.WINDOW_CLOSED:
                 break   
     elif event == "OK3":
@@ -544,9 +547,7 @@ tem que estar preenchidos.""", font=('Arial', 20))],
             if event == "Procurar":
                 for v in values["-INDIVIDUO-"]:
                     criarPerfil(v)  
-            elif event == 'Sair':
-                exit()
-            elif event == "Voltar":
+            elif event == "Voltar" or event == "Sair":
                 janelaListarIndividuos.close()
             elif event == sg.WINDOW_CLOSED:
                 break   
@@ -630,7 +631,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         elif event == sg.WINDOW_CLOSED:
                             break              
                         elif event == 'Sair':
-                            exit()
+                            janelaPesquisarPorReligiao.close()
+                            janelaPesquisarPor.close()
 
                 elif values['-PESQUISAPOR-'] == "Desporto":
                     distribDesporto= {}
@@ -652,7 +654,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         elif event == sg.WINDOW_CLOSED:
                             break              
                         elif event == 'Sair':
-                            exit()
+                            janelaPesquisarPorDesporto.close()
+                            janelaPesquisarPor.close()
 
                 elif values['-PESQUISAPOR-'] == "Partido Político":
                     distribPartido = {}
@@ -672,7 +675,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         elif event == sg.WINDOW_CLOSED:
                             break              
                         elif event == 'Sair':
-                            exit()
+                            janelaPesquisarPorPartido.close()
+                            janelaPesquisarPor.close()
 
                 elif values['-PESQUISAPOR-'] == "Distrito":
                     distribDistrito = {}
@@ -692,7 +696,8 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         elif event == sg.WINDOW_CLOSED:
                             break              
                         elif event == 'Sair':
-                            exit()
+                            janelaPesquisarPorDistrito.close()
+                            janelaPesquisarPor.close()
 
                 elif values['-PESQUISAPOR-'] == "Animal":
                     distribAnimais= {}
@@ -714,18 +719,17 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                         elif event == sg.WINDOW_CLOSED:
                             break              
                         elif event == 'Sair':
-                            exit()
+                            janelaPesquisarPorAnimal.close()
+                            janelaPesquisarPor.close()
 
             elif event == sg.WINDOW_CLOSED:
                 break              
-            elif event == 'Sair':
-                exit()
-            elif event == "Voltar":
+            elif event == "Voltar" or event == "Sair":
                 janelaPesquisarPor.close()
 
     elif event == "OK5":
+        
         #Menu estatístico
-
         menuEstatistico = [
         [sg.Text('Gráficos de favoritos:')],
         [sg.Combo(["Animais","Desportos","Destinos Favoritos","Figura Pública","Profissão","Religião"], key='-MENUESTATISTICO-')],
@@ -750,9 +754,7 @@ tem que estar preenchidos.""", font=('Arial', 20))],
 
             elif event == sg.WINDOW_CLOSED:
                 break   
-            elif event == 'Sair':
-                exit()
-            elif event == "Voltar":
+            elif event == "Voltar" or event == "Sair":
                 janelaMenuEstatistico.close()
 
     elif event == "OK6":
