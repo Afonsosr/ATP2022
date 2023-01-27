@@ -440,6 +440,18 @@ tem que estar preenchidos.""", font=('Arial', 20))],
                     populacao.append(registo)
                     nomes.append(registo["nome"])
                     nomes = sorted(nomes)
+                    if novoUtilizador['religiao'] not in distribReligião.keys():
+                        distribReligião[novoUtilizador['religiao']] = novoUtilizador['nome']
+                    if novoUtilizador['party_name'] not in distribPartido.keys():
+                        distribPartido[novoUtilizador['party_name']] = novoUtilizador['nome']
+                    if novoUtilizador['distrito'] not in distribDistrito.keys():
+                        distribDistrito[novoUtilizador['distrito']] = novoUtilizador['nome']
+                    for a in novoUtilizador["animais"].split(","):
+                        if a not in distribAnimais.keys():
+                            distribAnimais[a] = novoUtilizador['nome']
+                    for d in novoUtilizador['desportos'].split(","):
+                        if d not in distribDesporto.keys():
+                            distribDesporto[d] = novoUtilizador['nome']
                     event,_ = janelaOperacaoSucesso.read()                   
                     if event == "Voltar":
                         janelaOperacaoSucesso.close()   
